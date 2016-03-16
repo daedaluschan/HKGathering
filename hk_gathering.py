@@ -1,6 +1,7 @@
 __author__ = 'daedaluschan'
 
-## importing libraries
+# importing libraries
+
 
 import sys, time
 import telepot
@@ -10,7 +11,12 @@ from datetime import date
 from types import *
 from enum import Enum
 
-## Defining enums
+# Constants
+
+start_group_url = 'https://telegram.me/HKGathering_bot?startgroup=test'
+
+# Defining enums
+
 
 class ConverType(Enum):
     nothing=1
@@ -21,7 +27,9 @@ class CreatePollFlow(Enum):
     poll_question=2
     poll_choice=3
 
-## Poll data structure
+
+# Poll data structure
+
 
 class Poll():
     def __init__(self):
@@ -34,7 +42,9 @@ class Poll():
             choice_str = choice_str + ' - ' + each_choice
         return  'question: ' + self._question + '; choice: ' + choice_str
 
-## main class of message handling
+
+# main class of message handling
+
 
 class HKGathering(telepot.helper.ChatHandler):
     def __init__(self, seed_tuple, timeout):
