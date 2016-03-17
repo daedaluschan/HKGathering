@@ -63,6 +63,7 @@ class HKGathering(telepot.helper.ChatHandler):
         if flavor == 'normal':
             content_type, chat_type, _chat_id = telepot.glance2(msg)
             print('Normal Message:', content_type, chat_type, _chat_id, '; message content: ', msg)
+            print('Poll:' + self._poll.__str__()）
 
             if self._converType == ConverType.nothing:
 
