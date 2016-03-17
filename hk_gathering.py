@@ -66,7 +66,7 @@ class HKGathering(telepot.helper.ChatHandler):
             if self._converType == ConverType.nothing:
 
                 if msg['text'] == '/start':
-                    self.sender.sendMessage(text='Today is ' + str(date.today()) + '. \n' +
+                    self.sender.sendMessage(text='今日的日期係：' + str(date.today()) + '. \n' +
                                                  'User /new to create new poll. Or,' +
                                                  'use /help for more options')
                 elif msg['text'] == '/new':
