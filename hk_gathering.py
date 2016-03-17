@@ -68,19 +68,19 @@ class HKGathering(telepot.helper.ChatHandler):
 
                 if msg['text'] == '/start':
                     self.sender.sendMessage(text='今日的日期係：' + str(date.today()) + '. \n' +
-                                                 'User /new to create new poll. Or,' +
-                                                 'use /help for more options')
+                                                 '用 /new 黎 create 一個新問題，' +
+                                                 '或者用 /help 睇其他選項。')
                 elif msg['text'] == '/new':
                     self._converType = ConverType.create_poll
                     self._createPollFlow = CreatePollFlow.poll_question
-                    self.sender.sendMessage(text='Please send me over the question you want to ask.')
+                    self.sender.sendMessage(text='唔該 send 你個問題俾我。')
 
                 elif msg['text'] == '/help':
-                    self.sender.sendMessage(text='/new - create new poll. \n' +
-                                                 '/result - for query on the latest result \n')
+                    self.sender.sendMessage(text='用 /new 黎 create 一個新問題，\n' +
+                                                 '或者用 /result 黎查詢回應統計。\n')
                 else:
-                    self.sender.sendMessage(text='I don\'t understand what you are saying !\n' +
-                                                 'Try again ! Or use /help for assistance.')
+                    self.sender.sendMessage(text='唔知你想點，麻煩你再試過。\n' +
+                                                 '或者用 /help 睇其他選項。')
             elif self._converType == ConverType.create_poll :
                 if msg['text'] == '/done':
                     self.sender.sendMessage(text='Thank You!')
@@ -88,11 +88,11 @@ class HKGathering(telepot.helper.ChatHandler):
                     if self._createPollFlow == CreatePollFlow.poll_question:
                         self._poll._question = msg['text']
                         self._createPollFlow = CreatePollFlow.poll_choice
-                        self.sender.sendMessage(text='Please give me your preference')
+                        self.sender.sendMessage(text='好，咁你自己有乜意見？')
                     elif self._createPollFlow == CreatePollFlow.poll_choice:
                         self._poll._choices.append(msg['text'])
-                        self.sender.sendMessage(text='Please give me your next preference, if any.\n' +
-                                                     'use /done to complete creating your poll.')
+                        self.sender.sendMessage(text='好，仲有冇？有就繼續 send 下個個選擇。\n' +
+                                                     '如果冇就用 /done 完成建立問題。')
 
         else:
             raise telepot.BadFlavor(msg)
