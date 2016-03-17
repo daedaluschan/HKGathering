@@ -66,6 +66,8 @@ class HKGathering(telepot.helper.ChatHandler):
         print('on_message() is being called')
         flavor = telepot.flavor(msg)
 
+        print('flavor: ' + flavor)
+
         # normal message
         if flavor == 'normal':
             content_type, chat_type, _chat_id = telepot.glance2(msg)
