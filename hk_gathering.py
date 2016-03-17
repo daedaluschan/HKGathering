@@ -73,35 +73,40 @@ class HKGathering(telepot.helper.ChatHandler):
             content_type, chat_type, _chat_id = telepot.glance2(msg)
             print('Normal Message:', content_type, chat_type, _chat_id, '; message content: ', msg)
 
-            if self._converType == ConverType.nothing:
+            if chat_type == 'private':
 
-                if msg['text'] == '/start':
-                    self.sender.sendMessage(text='今日的日期係：' + str(date.today()) + '. \n' +
-                                                 '用 /new 黎 create 一個新問題，' +
-                                                 '或者用 /help 睇其他選項。')
-                elif msg['text'] == '/new':
-                    self._converType = ConverType.create_poll
-                    self._createPollFlow = CreatePollFlow.poll_question
-                    self.sender.sendMessage(text='唔該 send 你個問題俾我。')
+                if self._converType == ConverType.nothing:
 
-                elif msg['text'] == '/help':
-                    self.sender.sendMessage(text='用 /new 黎 create 一個新問題，\n' +
-                                                 '或者用 /result 黎查詢回應統計。\n')
-                else:
-                    self.sender.sendMessage(text='唔知你想點，麻煩你再試過。\n' +
-                                                 '或者用 /help 睇其他選項。')
-            elif self._converType == ConverType.create_poll :
-                if msg['text'] == '/done':
-                    self.complte_poll_creation()
-                elif msg['text'] != '':
-                    if self._createPollFlow == CreatePollFlow.poll_question:
-                        self._poll._question = msg['text']
-                        self._createPollFlow = CreatePollFlow.poll_choice
-                        self.sender.sendMessage(text='好，咁你自己有乜意見？')
-                    elif self._createPollFlow == CreatePollFlow.poll_choice:
-                        self._poll._choices.append(msg['text'])
-                        self.sender.sendMessage(text='好，仲有冇？有就繼續 send 下個個選擇。\n' +
-                                                     '如果冇就用 /done 完成建立問題。')
+                    if msg['text'] == '/start':
+                        self.sender.sendMessage(text='今日的日期係：' + str(date.today()) + '. \n' +
+                                                     '用 /new 黎 create 一個新問題，' +
+                                                     '或者用 /help 睇其他選項。')
+                    elif msg['text'] == '/new':
+                        self._converType = ConverType.create_poll
+                        self._createPollFlow = CreatePollFlow.poll_question
+                        self.sender.sendMessage(text='唔該 send 你個問題俾我。')
+
+                    elif msg['text'] == '/help':
+                        self.sender.sendMessage(text='用 /new 黎 create 一個新問題，\n' +
+                                                     '或者用 /result 黎查詢回應統計。\n')
+                    else:
+                        self.sender.sendMessage(text='唔知你想點，麻煩你再試過。\n' +
+                                                     '或者用 /help 睇其他選項。')
+                elif self._converType == ConverType.create_poll :
+                    if msg['text'] == '/done':
+                        self.complte_poll_creation()
+                    elif msg['text'] != '':
+                        if self._createPollFlow == CreatePollFlow.poll_question:
+                            self._poll._question = msg['text']
+                            self._createPollFlow = CreatePollFlow.poll_choice
+                            self.sender.sendMessage(text='好，咁你自己有乜意見？')
+                        elif self._createPollFlow == CreatePollFlow.poll_choice:
+                            self._poll._choices.append(msg['text'])
+                            self.sender.sendMessage(text='好，仲有冇？有就繼續 send 下個個選擇。\n' +
+                                                         '如果冇就用 /done 完成建立問題。')
+
+            elif chat_type == 'new_chat_participant':
+                print('invited into group')
 
             print('Poll:' + self._poll.__str__())
         else:
