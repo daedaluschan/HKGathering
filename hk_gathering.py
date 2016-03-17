@@ -11,10 +11,11 @@ from telepot.delegate import per_chat_id, create_open
 from datetime import date
 from types import *
 from enum import Enum
+import uuid
 
 # Constants
 
-start_group_url = 'https://telegram.me/HKGathering_bot?startgroup=test'
+start_group_url = 'https://telegram.me/HKGathering_bot?startgroup='
 
 # Defining enums
 
@@ -53,7 +54,13 @@ class HKGathering(telepot.helper.ChatHandler):
         print('constructor is being called')
         self._converType = ConverType.nothing
         self._createPollFlow = CreatePollFlow.not_start
+        self.__uid = ''
         self._poll = Poll()
+
+    def complte_poll_creation(self):
+        self.__uid = uuid.uuid4().hex
+        self.sender.sendMessage(text='用呢條 link 將問題放落 chat group 裡邊：\n' +
+                                     start_group_url + self.__uid)
 
     def on_message(self, msg):
         print('on_message() is being called')
@@ -83,7 +90,7 @@ class HKGathering(telepot.helper.ChatHandler):
                                                  '或者用 /help 睇其他選項。')
             elif self._converType == ConverType.create_poll :
                 if msg['text'] == '/done':
-                    self.sender.sendMessage(text='Thank You!')
+                    self.complte_poll_creation()
                 elif msg['text'] != '':
                     if self._createPollFlow == CreatePollFlow.poll_question:
                         self._poll._question = msg['text']
