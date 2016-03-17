@@ -80,11 +80,18 @@ class HKGathering(telepot.helper.ChatHandler):
                 else:
                     self.sender.sendMessage(text='I don\'t understand what you are saying !\n' +
                                                  'Try again ! Or use /help for assistance.')
-            elif self._converType == ConverType.create_poll:
-                if self._createPollFlow == CreatePollFlow.poll_question:
-                    self._poll._question = msg['text']
-                    self._createPollFlow = CreatePollFlow.poll_choice
-                    self.sender.sendMessage(text='Please give me your preference')
+            elif self._converType == ConverType.create_poll :
+                if msg['text'] == '/done':
+                    self.sender.sendMessage(text='Thank You!')
+                elif msg['text'] != '':
+                    if self._createPollFlow == CreatePollFlow.poll_question:
+                        self._poll._question = msg['text']
+                        self._createPollFlow = CreatePollFlow.poll_choice
+                        self.sender.sendMessage(text='Please give me your preference')
+                    elif self._createPollFlow == CreatePollFlow.poll_choice:
+                        self._poll._choices.append(msg['text'])
+                        self.sender.sendMessage(text='Please give me your next preference, if any.\n' +
+                                                     'use /done to complete creating your poll.')
 
         else:
             raise telepot.BadFlavor(msg)
