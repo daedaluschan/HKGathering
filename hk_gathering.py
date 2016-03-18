@@ -91,7 +91,7 @@ class HKGathering(telepot.helper.ChatHandler):
         allPoll[self.__uid] = self._poll
         #self.sender.sendMessage(text='用呢條 link 將問題放落 chat group 裡邊：\n' +
         #                             start_group_url + self.__uid)
-        self.sender.sendMessage(text='please use this link to start the poll: '\n' +
+        self.sender.sendMessage(text='please use this link to start the poll: \n' +
                                      start_group_url + self.__uid)
 
     def get_invited(self, inviterId):
