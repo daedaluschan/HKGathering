@@ -102,7 +102,7 @@ class HKGathering(telepot.helper.ChatHandler):
         self.sender.sendMessage(text='依家問你：' + self._poll.question.encode('utf-8') + '\n\n' +
                                      '現有選擇係：\n\n' +
                                      choice_str + '\n' +
-                                     '請用 /start@' + botName + '回應問題。')
+                                     '請用 /answer@' + botName + '回應問題。')
 
         # self.sender.sendMessage(text='依家問你：' + self._poll.question.encode('utf-8'))
 
@@ -151,9 +151,14 @@ class HKGathering(telepot.helper.ChatHandler):
                                                          '如果冇就用 /done 完成建立問題。')
 
             elif content_type == 'text' and chat_type == 'group':
-                print('invited into group')
-                poll_id = msg['text'].split(' ')[1]
-                self.get_invited(poll_id)
+                if msg['text'] == '/start@' + botName:
+                    print('invited into group')
+                    poll_id = msg['text'].split(' ')[1]
+                    self.get_invited(poll_id)
+                elif msg['text'] == '/answer@' + botName:
+                    print('answer to: ' + msg['from']['id'].__str__())
+                    self.bot.sendMessage(msg['from']['id'], 'hihi')
+
 
             print('Poll:' + self._poll.__str__())
         else:
