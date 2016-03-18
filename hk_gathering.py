@@ -151,7 +151,7 @@ class HKGathering(telepot.helper.ChatHandler):
                                                          '如果冇就用 /done 完成建立問題。')
 
             elif content_type == 'text' and chat_type == 'group':
-                if msg['text'] == '/start@' + botName:
+                if msg['text'].startswith('/start@' + botName):
                     print('invited into group')
                     poll_id = msg['text'].split(' ')[1]
                     self.get_invited(poll_id)
