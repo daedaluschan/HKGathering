@@ -90,7 +90,7 @@ class HKGathering(telepot.helper.ChatHandler):
                                      start_group_url + self.__uid)
 
     def get_invited(self, inviterId):
-        for poll in allPoll
+        for poll in allPoll:
             if poll.creatorId == inviterId:
                 self._poll = poll
         self.sender.sendMessage(text='依家問你：' + self._poll.question)
