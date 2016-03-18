@@ -13,8 +13,9 @@ from types import *
 from enum import Enum
 import uuid
 
-# Constants
+# Constants & globa data
 
+allPoll = {}
 start_group_url = 'https://telegram.me/HKGathering_bot?startgroup='
 
 # Defining enums
@@ -35,14 +36,39 @@ class CreatePollFlow(Enum):
 
 class Poll():
     def __init__(self):
-        self._question = ''
-        self._choices = []
+        self.question = ''
+        self.creatorId = 0
+        self.choices = []
 
     def __str__(self):
         choice_str = ''
         for each_choice in self._choices:
             choice_str = choice_str + ' - ' + each_choice
         return  'question: ' + self._question + '; choice: ' + choice_str
+
+    @property
+    def question(self):
+        return self._question
+
+    @question.setter
+    def question(self, value):
+        self._question = value
+
+    @property
+    def creatorId(self):
+        return  self._creatorId
+
+    @creatorId.setter
+    def creatorId(self, value):
+        self._creatorId = value
+
+    @property
+    def choices(self):
+        return self._choices
+
+    @choices.setter
+    def choices(self, value):
+        self._choices = value
 
 
 # main class of message handling
@@ -59,8 +85,15 @@ class HKGathering(telepot.helper.ChatHandler):
 
     def complte_poll_creation(self):
         self.__uid = uuid.uuid4().hex
+        allPoll[self.__uid] = self._poll
         self.sender.sendMessage(text='用呢條 link 將問題放落 chat group 裡邊：\n' +
                                      start_group_url + self.__uid)
+
+    def get_invited(self, inviterId):
+        for poll in allPoll
+            if poll.creatorId == inviterId:
+                self._poll = poll
+        self.sender.sendMessage(text='依家問你：' + self._poll.question)
 
     def on_message(self, msg):
         print('on_message() is being called')
@@ -84,6 +117,7 @@ class HKGathering(telepot.helper.ChatHandler):
                     elif msg['text'] == '/new':
                         self._converType = ConverType.create_poll
                         self._createPollFlow = CreatePollFlow.poll_question
+                        self._poll.creatorId = msg['from']['id']
                         self.sender.sendMessage(text='唔該 send 你個問題俾我。')
 
                     elif msg['text'] == '/help':
@@ -97,16 +131,19 @@ class HKGathering(telepot.helper.ChatHandler):
                         self.complte_poll_creation()
                     elif msg['text'] != '':
                         if self._createPollFlow == CreatePollFlow.poll_question:
-                            self._poll._question = msg['text']
+                            self._poll.question = msg['text']
                             self._createPollFlow = CreatePollFlow.poll_choice
                             self.sender.sendMessage(text='好，咁你自己有乜意見？')
                         elif self._createPollFlow == CreatePollFlow.poll_choice:
-                            self._poll._choices.append(msg['text'])
+                            self._poll.choices.append(msg['text'])
                             self.sender.sendMessage(text='好，仲有冇？有就繼續 send 下個個選擇。\n' +
                                                          '如果冇就用 /done 完成建立問題。')
 
             elif chat_type == 'new_chat_participant':
                 print('invited into group')
+                inviterId = msg['from']['id']
+                self.get_invited(inviterId)
+
 
             print('Poll:' + self._poll.__str__())
         else:
