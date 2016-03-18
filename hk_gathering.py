@@ -45,7 +45,7 @@ class Poll():
         choice_str = ''
         for each_choice in self.choices:
             choice_str = choice_str + ' - ' + each_choice
-        return  'question: ' + self._question + '; choice: ' + choice_str
+        return  'question: ' + self.question + '; choice: ' + choice_str
 
     @property
     def question(self):
