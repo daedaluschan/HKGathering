@@ -93,10 +93,8 @@ class HKGathering(telepot.helper.ChatHandler):
                                      start_group_url + self.__uid)
 
     def get_invited(self, inviterId):
-        for poll in allPoll:
-            if poll.creatorId == inviterId:
-                self._poll = poll
-        self.sender.sendMessage(text='依家問你：' + self._poll.question + '\n' +
+        self._poll = allPoll[inviterId]
+        self.sender.sendMessage(text='依家問你：' + self._poll.question + '\n\n' +
                                      '請用 /start@' + botName + '回應問題。')
 
     def on_message(self, msg):
@@ -143,10 +141,10 @@ class HKGathering(telepot.helper.ChatHandler):
                             self.sender.sendMessage(text='好，仲有冇？有就繼續 send 下個個選擇。\n' +
                                                          '如果冇就用 /done 完成建立問題。')
 
-            elif content_type == 'new_chat_participant':
+            elif chat_type == 'group':
                 print('invited into group')
-                inviter_id = msg['from']['id']
-                self.get_invited(inviter_id)
+                poll_id = msg['text'].split(' ')[1]
+                self.get_invited(poll_id)
 
             print('Poll:' + self._poll.__str__())
         else:
