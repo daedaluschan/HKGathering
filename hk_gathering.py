@@ -42,6 +42,7 @@ class Poll():
         self.question = ''
         self.creatorId = 0
         self.choices = []
+        self.groupId = 0
 
     def __str__(self):
         choice_str = ''
@@ -73,6 +74,14 @@ class Poll():
     def choices(self, value):
         self._choices = value
 
+    @property
+    def groupId(self):
+        return self._groupId
+
+    @groupId.setter
+    def groupId(self, value):
+        self._groupId = value
+
 
 # main class of message handling
 
@@ -103,8 +112,6 @@ class HKGathering(telepot.helper.ChatHandler):
                                      '現有選擇係：\n\n' +
                                      choice_str + '\n' +
                                      '請用 /answer@' + botName + '回應問題。')
-
-        # self.sender.sendMessage(text='依家問你：' + self._poll.question.encode('utf-8'))
 
     def on_message(self, msg):
         print('on_message() is being called')
@@ -155,6 +162,7 @@ class HKGathering(telepot.helper.ChatHandler):
                     print('invited into group')
                     poll_id = msg['text'].split(' ')[1]
                     self.get_invited(poll_id)
+                    allPoll[poll_id].groupId = _chat_id
                 elif msg['text'] == '/answer@' + botName:
                     print('answer to: ' + msg['from']['id'].__str__())
                     self.bot.sendMessage(msg['from']['id'], 'hihi')
