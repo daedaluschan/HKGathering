@@ -13,23 +13,25 @@ from types import *
 from enum import Enum
 import uuid
 
-# Constants & globa data
+# Constants & global data
 
 allPoll = {}
 botName = 'HKGathering_bot'
 start_group_url = 'https://telegram.me/' + botName + '?startgroup='
 
+
 # Defining enums
 
 
 class ConverType(Enum):
-    nothing=1
-    create_poll=2
+    nothing = 1
+    create_poll = 2
+
 
 class CreatePollFlow(Enum):
-    not_start=1
-    poll_question=2
-    poll_choice=3
+    not_start = 1
+    poll_question = 2
+    poll_choice = 3
 
 
 # Poll data structure
@@ -43,9 +45,9 @@ class Poll():
 
     def __str__(self):
         choice_str = ''
-        for each_choice in self.choices:
+        for each_choice in self._choices:
             choice_str = choice_str + ' - ' + each_choice
-        return  'question: ' + self.question + '; choice: ' + choice_str
+        return 'question: ' + self._question + '; choice: ' + choice_str
 
     @property
     def question(self):
@@ -57,7 +59,7 @@ class Poll():
 
     @property
     def creatorId(self):
-        return  self._creatorId
+        return self._creatorId
 
     @creatorId.setter
     def creatorId(self, value):
@@ -128,7 +130,7 @@ class HKGathering(telepot.helper.ChatHandler):
                     else:
                         self.sender.sendMessage(text='唔知你想點，麻煩你再試過。\n' +
                                                      '或者用 /help 睇其他選項。')
-                elif self._converType == ConverType.create_poll :
+                elif self._converType == ConverType.create_poll:
                     if msg['text'] == '/done':
                         self.complte_poll_creation()
                     elif msg['text'] != '':
@@ -141,19 +143,19 @@ class HKGathering(telepot.helper.ChatHandler):
                             self.sender.sendMessage(text='好，仲有冇？有就繼續 send 下個個選擇。\n' +
                                                          '如果冇就用 /done 完成建立問題。')
 
-            elif chat_type == 'new_chat_participant':
+            elif content_type == 'new_chat_participant':
                 print('invited into group')
-                inviterId = msg['from']['id']
-                self.get_invited(inviterId)
-
+                inviter_id = msg['from']['id']
+                self.get_invited(inviter_id)
 
             print('Poll:' + self._poll.__str__())
         else:
             raise telepot.BadFlavor(msg)
 
+
 TOKEN = sys.argv[1]  # get token from command-line
 
 bot = telepot.DelegatorBot(TOKEN, [
-    (per_chat_id(), create_open(HKGathering, timeout=20)),])
+    (per_chat_id(), create_open(HKGathering, timeout=20)), ])
 print('Listening ...')
 bot.notifyOnMessage(run_forever=True)
