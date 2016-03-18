@@ -159,7 +159,6 @@ class HKGathering(telepot.helper.ChatHandler):
                     print('answer to: ' + msg['from']['id'].__str__())
                     self.bot.sendMessage(msg['from']['id'], 'hihi')
 
-
             print('Poll:' + self._poll.__str__())
         else:
             raise telepot.BadFlavor(msg)
