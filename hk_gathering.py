@@ -17,6 +17,7 @@ import uuid
 
 allPoll = {}
 botName = 'HKGathering_bot'
+start_private_url = 'https://telegram.me/' + botName + '?start='
 start_group_url = 'https://telegram.me/' + botName + '?startgroup='
 
 
@@ -111,7 +112,7 @@ class HKGathering(telepot.helper.ChatHandler):
         self.sender.sendMessage(text='依家問你：' + self._poll.question.encode('utf-8') + '\n\n' +
                                      '現有選擇係：\n\n' +
                                      choice_str + '\n' +
-                                     '請用 /answer@' + botName + '回應問題。')
+                                     '請用：' + start_private_url + inviterId + '回應問題。')
 
     def on_message(self, msg):
         print('on_message() is being called')
