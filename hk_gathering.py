@@ -16,7 +16,8 @@ import uuid
 # Constants & globa data
 
 allPoll = {}
-start_group_url = 'https://telegram.me/HKGathering_bot?startgroup='
+botName = 'HKGathering_bot'
+start_group_url = 'https://telegram.me/' + botName + '?startgroup='
 
 # Defining enums
 
@@ -42,7 +43,7 @@ class Poll():
 
     def __str__(self):
         choice_str = ''
-        for each_choice in self._choices:
+        for each_choice in self.choices:
             choice_str = choice_str + ' - ' + each_choice
         return  'question: ' + self._question + '; choice: ' + choice_str
 
@@ -93,7 +94,8 @@ class HKGathering(telepot.helper.ChatHandler):
         for poll in allPoll:
             if poll.creatorId == inviterId:
                 self._poll = poll
-        self.sender.sendMessage(text='依家問你：' + self._poll.question)
+        self.sender.sendMessage(text='依家問你：' + self._poll.question + '\n' +
+                                     '請用 /start@' + botName + '回應問題。')
 
     def on_message(self, msg):
         print('on_message() is being called')
