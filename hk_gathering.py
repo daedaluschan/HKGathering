@@ -108,7 +108,7 @@ class HKGathering(telepot.helper.ChatHandler):
             content_type, chat_type, _chat_id = telepot.glance2(msg)
             print('Normal Message:', content_type, chat_type, _chat_id, '; message content: ', msg)
 
-            if chat_type == 'private':
+            if content_type == 'text' and chat_type == 'private':
 
                 if self._converType == ConverType.nothing:
 
@@ -141,7 +141,7 @@ class HKGathering(telepot.helper.ChatHandler):
                             self.sender.sendMessage(text='好，仲有冇？有就繼續 send 下個個選擇。\n' +
                                                          '如果冇就用 /done 完成建立問題。')
 
-            elif chat_type == 'group':
+            elif content_type == 'text' and chat_type == 'group':
                 print('invited into group')
                 poll_id = msg['text'].split(' ')[1]
                 self.get_invited(poll_id)
