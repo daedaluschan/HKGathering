@@ -95,9 +95,13 @@ class HKGathering(telepot.helper.ChatHandler):
     def get_invited(self, inviterId):
         self._poll = allPoll[inviterId]
         print('Linked poll: ' + self._poll.__str__())
-        #self.sender.sendMessage(text='依家問你：' + self._poll.question + '\n\n' +
-        #                             '請用 /start@' + botName + '回應問題。')
-        self.sender.sendMessage(text='依家問你：' + self._poll.question.encode('utf-8'))
+        self.sender.sendMessage(text='依家問你：' + self._poll.question.encode('utf-8') + '\n\n' +
+                                     '現有選擇係：\n\n')
+        for choice in self._poll.choices:
+            self.sender.sendMessage(text=choice.encode('utf-8'))
+            self.sender.sendMessage('\n\n')
+            self.sender.sendMessage('請用 /start@' + botName + '回應問題。')
+        # self.sender.sendMessage(text='依家問你：' + self._poll.question.encode('utf-8'))
 
     def on_message(self, msg):
         print('on_message() is being called')
