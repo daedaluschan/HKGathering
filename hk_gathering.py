@@ -89,15 +89,15 @@ class HKGathering(telepot.helper.ChatHandler):
     def complte_poll_creation(self):
         self.__uid = uuid.uuid4().hex
         allPoll[self.__uid] = self._poll
-        #self.sender.sendMessage(text='用呢條 link 將問題放落 chat group 裡邊：\n' +
-        #                             start_group_url + self.__uid)
-        self.sender.sendMessage(text='please use this link to start the poll: \n' +
+        self.sender.sendMessage(text='用呢條 link 將問題放落 chat group 裡邊：\n' +
                                      start_group_url + self.__uid)
 
     def get_invited(self, inviterId):
         self._poll = allPoll[inviterId]
-        self.sender.sendMessage(text='依家問你：' + self._poll.question + '\n\n' +
-                                     '請用 /start@' + botName + '回應問題。')
+        print('Linked poll: ' + self._poll.__str__())
+        self.sender.sendMessage(text='hello hello')
+        # self.sender.sendMessage(text='依家問你：' + self._poll.question + '\n\n' +
+        #                             '請用 /start@' + botName + '回應問題。')
 
     def on_message(self, msg):
         print('on_message() is being called')
