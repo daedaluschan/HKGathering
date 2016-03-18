@@ -112,7 +112,8 @@ class HKGathering(telepot.helper.ChatHandler):
         self.sender.sendMessage(text='依家問你：' + self._poll.question.encode('utf-8') + '\n\n' +
                                      '現有選擇係：\n\n' +
                                      choice_str + '\n' +
-                                     '請用：' + start_private_url.encode('utf-8') + inviterId.encode('utf-8') + '回應問題。')
+                                     '請用下面條 link 回應問題：\n' +
+                                     start_private_url.encode('utf-8') + inviterId.encode('utf-8'))
 
     def on_message(self, msg):
         print('on_message() is being called')
