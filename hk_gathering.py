@@ -83,6 +83,17 @@ class Poll():
     def groupId(self, value):
         self._groupId = value
 
+    @property
+    def survey_str(self):
+        choice_str = ''
+        for choice in self.choices:
+            choice_str = choice_str + choice.encode('utf-8') + '\n'
+
+        survey_text = '依家問你：' + self._poll.question.encode('utf-8') + '\n\n' + '現有選擇係：\n\n' + choice_str + '\n'
+
+        return survey_text
+
+
 
 # main class of message handling
 
@@ -102,19 +113,23 @@ class HKGathering(telepot.helper.ChatHandler):
         self.sender.sendMessage(text='用呢條 link 將問題放落 chat group 裡邊：\n' +
                                      start_group_url + self.__uid)
 
-    def get_invited(self, inviterId):
-        self._poll = allPoll[inviterId]
+    def get_invited(self, poll_id):
+        self._poll = allPoll[poll_id]
         print('Linked poll: ' + self._poll.__str__())
         choice_str = ''
         for choice in self._poll.choices:
             choice_str = choice_str + choice.encode('utf-8') + '\n'
 
-        self.sender.sendMessage(text='依家問你：' + self._poll.question.encode('utf-8') + '\n\n' +
-                                     '現有選擇係：\n\n' +
-                                     choice_str + '\n' +
-                                     '請用 /answer@' + botName.encode(encoding='utf-8') + ' 回應問題：\n')
+        self.sender.sendMessage(text=self._poll.survey_str + '\n' +
+                                     '請用 /answer@' + botName.encode(encoding='utf-8') +
+                                     '-' + poll_id.encode(encoding='utf-8') +  ' 回應問題。\n')
 
-    def initiate_survey(self):
+    def initiate_survey(self, poll_id, target_id):
+        print('answer to: ' + target_id.__str__())
+        self.bot.sendMessage(target_id,
+                             text=self._poll.survey_str + '\n' +
+                                  '請用 /begin-' + poll_id.encode(encoding='utf-8') +
+                                  ' 開始作答。\n')
 
     def on_message(self, msg):
         print('on_message() is being called')
@@ -164,11 +179,11 @@ class HKGathering(telepot.helper.ChatHandler):
                 if msg['text'].startswith('/start@' + botName):
                     print('invited into group')
                     poll_id = msg['text'].split(' ')[1]
-                    self.get_invited(poll_id)
+                    self.get_invited(poll_id, target_id=msg['from']['id'])
                     allPoll[poll_id].groupId = _chat_id
-                elif msg['text'] == '/answer@' + botName:
-                    print('answer to: ' + msg['from']['id'].__str__())
-                    self.bot.sendMessage(msg['from']['id'], 'hihi')
+                elif msg['text'].startswith('/answer@' + botName):
+                    poll_id = msg['text'].split('-')[1]
+                    self.initiate_survey(poll_id)
 
             print('Poll:' + self._poll.__str__())
         else:
