@@ -89,7 +89,7 @@ class Poll():
         for choice in self.choices:
             choice_str = choice_str + choice.encode('utf-8') + '\n'
 
-        survey_text = '依家問你：' + self._poll.question.encode('utf-8') + '\n\n' + '現有選擇係：\n\n' + choice_str + '\n'
+        survey_text = '依家問你：' + self.question.encode('utf-8') + '\n\n' + '現有選擇係：\n\n' + choice_str + '\n'
 
         return survey_text
 
