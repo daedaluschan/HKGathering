@@ -119,10 +119,13 @@ class HKGathering(telepot.helper.ChatHandler):
         choice_str = ''
         for choice in self._poll.choices:
             choice_str = choice_str + choice.encode('utf-8') + '\n'
+        ans_link = '/answer@' + botName.encode(encoding='utf-8') +\
+                   '-' + poll_id.encode(encoding='utf-8')
+        show_keyboard = {'keyboard': [[ans_link], ['開始作答']]}
 
         self.sender.sendMessage(text=self._poll.survey_str + '\n' +
-                                     '請用 /answer@' + botName.encode(encoding='utf-8') +
-                                     '-' + poll_id.encode(encoding='utf-8') +  ' 回應問題。\n')
+                                     '請用 ' + ans_link +  ' 回應問題。\n',
+                                reply_markup=show_keyboard)
 
     def initiate_survey(self, poll_id, target_id):
         print('answer to: ' + target_id.__str__())
