@@ -119,9 +119,9 @@ class HKGathering(telepot.helper.ChatHandler):
         choice_str = ''
         for choice in self._poll.choices:
             choice_str = choice_str + choice.encode('utf-8') + '\n'
-        ans_link = '/answer@' + botName.encode(encoding='utf-8') +\
-                   '-' + poll_id.encode(encoding='utf-8')
-        show_keyboard = {'keyboard': [[ans_link], ['開始作答']]}
+        ans_link = '/answer' +\
+                   '_' + poll_id.encode(encoding='utf-8')
+        show_keyboard = {'keyboard': [[ans_link]]}
 
         self.sender.sendMessage(text=self._poll.survey_str + '\n' +
                                      '請用 ' + ans_link +  ' 回應問題。\n',
