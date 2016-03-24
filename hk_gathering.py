@@ -120,10 +120,11 @@ class HKGathering(telepot.helper.ChatHandler):
         for choice in self._poll.choices:
             choice_str = choice_str + choice.encode('utf-8') + '\n'
         ans_link = '/answer' +'_' + poll_id.encode(encoding='utf-8')
-        show_keyboard = {'keyboard': [[ans_link]]}
+        show_keyboard = {'keyboard': [['開始回應']]}
 
         self.sender.sendMessage(text=self._poll.survey_str + '\n' +
-                                     '請用 ' + ans_link +  ' 回應問題。\n',
+                                     '請用 ' + ans_link +  ' 回應問題。\n' +
+                                     '或者用 pop up 鍵盤開始回應。',
                                 reply_markup=show_keyboard)
 
     def initiate_survey(self, poll_id, target_id):
