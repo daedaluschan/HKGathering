@@ -36,6 +36,29 @@ class CreatePollFlow(Enum):
     poll_choice = 3
 
 
+# Response data structure
+
+class Response():
+    def __init__(self):
+        self.userid = ''
+        self.preference = []
+
+    @property
+    def userid(self):
+        return self._userid
+
+    @userid.setter
+    def userid(self, value):
+        self._userid = value
+
+    @property
+    def preference(self):
+        return self._preference
+
+    @preference.setter
+    def preference(self, value):
+        self._preference = value
+
 # Poll data structure
 
 
@@ -45,6 +68,7 @@ class Poll():
         self.creatorId = 0
         self.choices = []
         self.groupId = 0
+        self.response = []
 
     def __str__(self):
         choice_str = ''
@@ -94,6 +118,19 @@ class Poll():
 
         return survey_text
 
+    @property
+    def response(self):
+        return self._response
+
+    @response.setter
+    def response(self, value):
+        self._response = value
+
+    def genNullResponse(self):
+        preference_vector = []
+        for each_choice in self.choices:
+            preference_vector.append(False)
+        return preference_vector
 
 
 # main class of message handling
@@ -131,11 +168,14 @@ class HKGathering(telepot.helper.ChatHandler):
 
     def initiate_survey(self, poll_id, target_id):
         print('answer to: ' + target_id.__str__())
+        new_response = Response()
+        new_response.userid = target_id
+        new_response.preference = self._poll.genNullResponse()
+        allPoll[poll_id].response.append(new_response)
         show_keyboard = {'keyboard': [['開始']]}
         self.bot.sendMessage(target_id,
                              text=self._poll.survey_str + '\n' +
-                                  '請用 /begin_' + poll_id.encode(encoding='utf-8') +
-                                  ' 或者用 pop up 鍵盤開始。',
+                                  '請用 /begin 或者用 pop up 鍵盤開始。',
                              reply_markup=show_keyboard)
 
     def start_survey(self, poll_id):
