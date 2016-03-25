@@ -41,6 +41,7 @@ class CreatePollFlow(Enum):
 class Response():
     def __init__(self):
         self.userid = ''
+        self.display_name = ''
         self.preference = []
 
     @property
@@ -58,6 +59,14 @@ class Response():
     @preference.setter
     def preference(self, value):
         self._preference = value
+
+    @property
+    def display_name(self):
+        return self._display_name
+
+    @display_name.setter
+    def display_name(self, value):
+        self._display_name = value
 
 # Poll data structure
 
@@ -166,10 +175,11 @@ class HKGathering(telepot.helper.ChatHandler):
                                      '或者用 pop up 鍵盤開始回應。',
                                 reply_markup=show_keyboard)
 
-    def initiate_survey(self, poll_id, target_id):
+    def initiate_survey(self, poll_id, target_id, display_name):
         print('answer to: ' + target_id.__str__())
         new_response = Response()
         new_response.userid = target_id
+        new_response.display_name = display_name
         new_response.preference = self._poll.genNullResponse()
         allPoll[poll_id].response.append(new_response)
         show_keyboard = {'keyboard': [['開始']]}
@@ -209,15 +219,18 @@ class HKGathering(telepot.helper.ChatHandler):
                     elif msg['text'] == '/help':
                         self.sender.sendMessage(text='用 /new 黎 create 一個新問題，\n' +
                                                      '或者用 /result 黎查詢回應統計。\n')
-                    elif msg['text'].startswith('/begin'):
-                        self._converType = ConverType.response_poll
-                        poll_id = msg['text'].split('_')[1]
-                        self.start_survey(poll_id)
-                    elif msg['text'].encode(encoding='utf-8') == '開始':
-                        self._converType = ConverType.response_poll
-                        orig_text = msg['reply_to_message']['text']
-                        poll_id = orig_text.split('/begin_')[1].split(' ')[0]
-                        self.start_survey(poll_id)
+
+                    elif msg['text'].encode(encoding='utf-8') == '開始' or msg['text'].startswith('/begin'):
+                        found_poll = 0
+                        for poll_key in allPoll.keys():
+                            for each_resp in allPoll[poll_key].response:
+                                if each_resp.userid == msg['from']['id']:
+                                    found_poll = poll_key
+                        if found_poll != 0:
+                            self._converType = ConverType.response_poll
+                            self.start_survey(found_poll)
+                        else:
+                            self.sender.sendMessage(text='搵唔到你的問題。')
                     else:
                         self.sender.sendMessage(text='唔知你想點，麻煩你再試過。\n' +
                                                      '或者用 /help 睇其他選項。')
@@ -242,11 +255,15 @@ class HKGathering(telepot.helper.ChatHandler):
                     allPoll[poll_id].groupId = _chat_id
                 elif msg['text'].startswith('/answer_'):
                     poll_id = msg['text'].split('_')[1].split('@')[0]
-                    self.initiate_survey(poll_id, target_id=msg['from']['id'])
+                    self.initiate_survey(poll_id,
+                                         target_id=msg['from']['id'],
+                                         display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
                 elif msg['text'].encode(encoding='utf-8') == '開始回應':
                     orig_text = msg['reply_to_message']['text']
                     poll_id = orig_text.split('/answer_')[1].split(' ')[0]
-                    self.initiate_survey(poll_id, target_id=msg['from']['id'])
+                    self.initiate_survey(poll_id,
+                                         target_id=msg['from']['id'],
+                                         display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
 
             print('Poll:' + self._poll.__str__())
         else:
