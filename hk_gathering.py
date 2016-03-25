@@ -27,6 +27,7 @@ start_group_url = 'https://telegram.me/' + botName + '?startgroup='
 class ConverType(Enum):
     nothing = 1
     create_poll = 2
+    response_poll = 3
 
 
 class CreatePollFlow(Enum):
@@ -137,7 +138,7 @@ class HKGathering(telepot.helper.ChatHandler):
                              reply_markup=show_keyboard)
 
     def start_survey(self, poll_id):
-        print('start survey with ')
+        print('start survey with poll id: ' + poll_id)
 
     def on_message(self, msg):
         print('on_message() is being called')
@@ -167,6 +168,15 @@ class HKGathering(telepot.helper.ChatHandler):
                     elif msg['text'] == '/help':
                         self.sender.sendMessage(text='用 /new 黎 create 一個新問題，\n' +
                                                      '或者用 /result 黎查詢回應統計。\n')
+                    elif msg['text'].startswith('/begin'):
+                        self._converType = ConverType.response_poll
+                        poll_id = msg['text'].split('_')[1]
+                        self.start_survey(poll_id)
+                    elif msg['text'].encode(encoding='utf-8') == '開始':
+                        self._converType = ConverType.response_poll
+                        orig_text = msg['reply_to_message']['text']
+                        poll_id = orig_text.split('/begin_')[1].split(' ')[0]
+                        self.start_survey(poll_id)
                     else:
                         self.sender.sendMessage(text='唔知你想點，麻煩你再試過。\n' +
                                                      '或者用 /help 睇其他選項。')
