@@ -194,8 +194,10 @@ class HKGathering(telepot.helper.ChatHandler):
         new_response = Response()
         new_response.userid = target_id
         new_response.display_name = display_name
-        new_response.preference = self._poll.genNullResponse()
+        new_response.preference = allPoll[poll_id].genNullResponse()
         allPoll[poll_id].response[target_id.__str__()] = new_response
+        # allPoll[poll_id].response.append({target_id.__str__(): new_response})
+
 
         print ('new_response: ' + new_response.__str__())
         print ('saved resposne: ' + allPoll[poll_id].response[target_id.__str__()].__str__())
