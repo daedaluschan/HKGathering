@@ -232,7 +232,7 @@ class HKGathering(telepot.helper.ChatHandler):
                     elif msg['text'].encode(encoding='utf-8') == '開始' or msg['text'].startswith('/begin'):
                         found_poll = 0
                         for poll_key in allPoll.keys():
-                            for each_resp in (allPoll[poll_key].response):
+                            for each_resp in allPoll[poll_key].response:
                                 print('each_resp: ' + each_resp)
                                 if each_resp.userid == msg['from']['id']:
                                     found_poll = poll_key
