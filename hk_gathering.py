@@ -199,7 +199,7 @@ class HKGathering(telepot.helper.ChatHandler):
                     poll_id = msg['text'].split(' ')[1]
                     self.get_invited(poll_id)
                     allPoll[poll_id].groupId = _chat_id
-                elif msg['text'].startswith('/answer_' + botName):
+                elif msg['text'].startswith('/answer_'):
                     poll_id = msg['text'].split('_')[1].split('@')[0]
                     self.initiate_survey(poll_id, target_id=msg['from']['id'])
                 elif msg['text'].encode(encoding='utf-8') == '開始回應':
