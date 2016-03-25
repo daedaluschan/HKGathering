@@ -189,8 +189,8 @@ class HKGathering(telepot.helper.ChatHandler):
         new_response.preference = self._poll.genNullResponse()
         allPoll[poll_id].response[target_id.__str__()] = new_response
 
-        print ('new_response: ' + new_response)
-        print ('saved resposne: ' + allPoll[poll_id].response[target_id.__str__()])
+        print ('new_response: ' + new_response.__str__())
+        print ('saved resposne: ' + allPoll[poll_id].response[target_id.__str__()].__str__())
         show_keyboard = {'keyboard': [['開始']]}
         self.bot.sendMessage(target_id,
                              text=self._poll.survey_str + '\n' +
