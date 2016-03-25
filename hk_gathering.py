@@ -40,9 +40,13 @@ class CreatePollFlow(Enum):
 
 class Response():
     def __init__(self):
-        self.userid = ''
+        self.userid = 0
         self.display_name = ''
         self.preference = []
+
+    def __str__(self):
+        return '[response_obj][' + self.userid.__str__() + '][' + self.display_name + '][' + \
+               len(self.preference).__str__()
 
     @property
     def userid(self):
