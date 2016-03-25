@@ -233,6 +233,7 @@ class HKGathering(telepot.helper.ChatHandler):
                         found_poll = 0
                         for poll_key in allPoll.keys():
                             for each_resp in allPoll[poll_key].response:
+                                print(each_resp)
                                 if each_resp.userid == msg['from']['id']:
                                     found_poll = poll_key
                         if found_poll != 0:
