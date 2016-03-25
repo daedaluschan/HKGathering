@@ -46,7 +46,7 @@ class Response():
 
     def __str__(self):
         return '[response_obj][' + self.userid.__str__() + '][' + self.display_name + '][' + \
-               len(self.preference).__str__()
+               len(self.preference).__str__() + ']'
 
     @property
     def userid(self):
@@ -85,9 +85,13 @@ class Poll():
 
     def __str__(self):
         choice_str = ''
+        response_str = ''
         for each_choice in self.choices:
             choice_str = choice_str + ' - ' + each_choice
-        return 'question: ' + self.question + '; choice: ' + choice_str
+        for each_response in self.response:
+            response_str = response_str + '<' + each_response + '>'
+        return '[Poll_obj][question: ' + self.question + '][choice: ' + choice_str + '][group: ' + \
+               self.groupId.__str__() + '][all_resp: ' + response_str + ']'
 
     @property
     def question(self):
@@ -195,6 +199,7 @@ class HKGathering(telepot.helper.ChatHandler):
 
         print ('new_response: ' + new_response.__str__())
         print ('saved resposne: ' + allPoll[poll_id].response[target_id.__str__()].__str__())
+
         show_keyboard = {'keyboard': [['開始']]}
         self.bot.sendMessage(target_id,
                              text=self._poll.survey_str + '\n' +
