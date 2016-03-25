@@ -77,7 +77,7 @@ class Poll():
         self.creatorId = 0
         self.choices = []
         self.groupId = 0
-        self.response = []
+        self.response = {}
 
     def __str__(self):
         choice_str = ''
@@ -118,10 +118,16 @@ class Poll():
         self._groupId = value
 
     @property
-    def survey_str(self):
+    def survey_str(self, response_attached=[]):
         choice_str = ''
+        i = 1
         for choice in self.choices:
-            choice_str = choice_str + '- ' + choice.encode('utf-8') + '\n'
+            if len(response_attached) == 0:
+                choice_str = choice_str + '- ' + choice.encode('utf-8') + '\n'
+            else:
+                choice_str = choice_str + '- /' + i.__str__() + ' ' + choice.encode('utf-8') + \
+                ' -- 現在回應：' + 'Yes' if response_attached[i-1] else 'No' +' \n'
+            i += 1
 
         survey_text = '依家問你：' + self.question.encode('utf-8') + '\n\n' + '現有選擇係：\n\n' + choice_str + '\n'
 
@@ -181,15 +187,18 @@ class HKGathering(telepot.helper.ChatHandler):
         new_response.userid = target_id
         new_response.display_name = display_name
         new_response.preference = self._poll.genNullResponse()
-        allPoll[poll_id].response.append(new_response)
+        allPoll[poll_id].response[target_id.__str__()] = new_response
         show_keyboard = {'keyboard': [['開始']]}
         self.bot.sendMessage(target_id,
                              text=self._poll.survey_str + '\n' +
                                   '請用 /begin 或者用 pop up 鍵盤開始。',
                              reply_markup=show_keyboard)
 
-    def start_survey(self, poll_id):
+    def start_survey(self, poll_id, userid):
         print('start survey with poll id: ' + poll_id)
+        self._poll = allPoll[poll_id]
+        self.sender.sendMessage(text=self._poll.survey_str(response_attached=allPoll[poll_id].response[userid.__str__()]) +
+                                     '\n' + '或者用 /add_pref 加入新選項。')
 
     def on_message(self, msg):
         print('on_message() is being called')
@@ -228,7 +237,7 @@ class HKGathering(telepot.helper.ChatHandler):
                                     found_poll = poll_key
                         if found_poll != 0:
                             self._converType = ConverType.response_poll
-                            self.start_survey(found_poll)
+                            self.start_survey(found_poll, msg['from']['id'])
                         else:
                             self.sender.sendMessage(text='搵唔到你的問題。')
                     else:
