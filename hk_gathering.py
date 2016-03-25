@@ -129,10 +129,15 @@ class HKGathering(telepot.helper.ChatHandler):
 
     def initiate_survey(self, poll_id, target_id):
         print('answer to: ' + target_id.__str__())
+        show_keyboard = {'keyboard': [['開始']]}
         self.bot.sendMessage(target_id,
                              text=self._poll.survey_str + '\n' +
-                                  '請用 /begin-' + poll_id.encode(encoding='utf-8') +
-                                  ' 開始作答。\n')
+                                  '請用 /begin_' + poll_id.encode(encoding='utf-8') +
+                                  ' 或者用 pop up 鍵盤開始。',
+                             reply_markup=show_keyboard)
+
+    def start_survey(self, poll_id):
+        print('start survey with ')
 
     def on_message(self, msg):
         print('on_message() is being called')
