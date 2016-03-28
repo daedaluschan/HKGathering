@@ -223,7 +223,7 @@ class HKGathering(telepot.helper.ChatHandler):
             print('No poll yet')
         else:
             for each_poll in allPoll:
-                print(each_poll.__str__())
+                print(allPoll[each_poll].__str__())
         print('========== END ============')
         flavor = telepot.flavor(msg)
 
