@@ -202,9 +202,7 @@ class HKGathering(telepot.helper.ChatHandler):
 
 
         print ('new_response: ' + new_response.__str__())
-        print ('new_response type : ' + type(new_response).__str__())
         print ('saved resposne: ' + allPoll[poll_id].response[target_id.__str__()].__str__())
-        print ('saved resposne type : ' + type(allPoll[poll_id].response[target_id.__str__()]).__str__())
 
         show_keyboard = {'keyboard': [['開始']]}
         self.bot.sendMessage(target_id,
@@ -220,6 +218,13 @@ class HKGathering(telepot.helper.ChatHandler):
 
     def on_message(self, msg):
         print('on_message() is being called')
+        print('==== all poll in cache ====')
+        if len(allPoll) == 0:
+            print('No poll yet')
+        else:
+            for each_poll in allPoll:
+                print(each_poll.__str__())
+        print('========== END ============')
         flavor = telepot.flavor(msg)
 
         print('flavor: ' + flavor)
