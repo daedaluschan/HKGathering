@@ -13,6 +13,8 @@ from types import *
 from enum import Enum
 import uuid
 
+from types import  *
+
 # Constants & global data
 
 allPoll = {}
@@ -200,7 +202,9 @@ class HKGathering(telepot.helper.ChatHandler):
 
 
         print ('new_response: ' + new_response.__str__())
+        print ('new_response type : ' + type(new_response).__str__())
         print ('saved resposne: ' + allPoll[poll_id].response[target_id.__str__()].__str__())
+        print ('saved resposne type : ' + type(allPoll[poll_id].response[target_id.__str__()]).__str__())
 
         show_keyboard = {'keyboard': [['開始']]}
         self.bot.sendMessage(target_id,
