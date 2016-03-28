@@ -187,6 +187,14 @@ class Poll():
         show_keyboard['keyboard'].append(['完'])
         return  show_keyboard
 
+    def genResponseStatus(self, poll_id,  completd_userid=0):
+        status_str = ''
+        if completd_userid != 0:
+            status_str = status_str + self.response[completd_userid.__str__()].display_name + \
+                         '　己原成作答，但你仍可以 ' + \
+                         '/answer' +'_' + poll_id.encode(encoding='utf-8') + '　繼續回應。\n\n'
+        return status_str
+
 
 # main class of message handling
 
