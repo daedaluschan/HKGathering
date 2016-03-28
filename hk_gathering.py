@@ -130,13 +130,16 @@ class Poll():
     def gen_survey_str(self, response_attached=[]):
         choice_str = ''
         i = 1
+        print(self.choices)
         for choice in self.choices:
             if len(response_attached) == 0:
                 choice_str = choice_str + '- ' + choice.encode('utf-8') + '\n'
             else:
                 choice_str = choice_str + '- /' + i.__str__() + ' ' + choice.encode('utf-8') + \
-                ' -- 現在回應：' + 'Yes' if response_attached[i-1] else 'No' +' \n'
-            i += 1
+                ' -- 現在回應：' + 'Yes\n'
+                # choice_str = choice_str + '- /' + i.__str__() + ' ' + choice.encode('utf-8') + \
+                # ' -- 現在回應：' + 'Yes' if response_attached[i-1] else 'No' +' \n'
+            i = i + 1
 
         survey_text = '依家問你：' + self.question.encode('utf-8') + '\n\n現有選擇係：\n\n' + choice_str + '\n'
 
