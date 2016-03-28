@@ -48,8 +48,15 @@ class Response():
         self.preference = []
 
     def __str__(self):
+        resp_str = ''
+        for resp in self.preference:
+            if resp:
+                resp_str = resp_str + '1'
+            else:
+                resp_str = resp_str + '0'
+
         return '[response_obj][' + self.userid.__str__() + '][' + self.display_name + '][' + \
-               len(self.preference).__str__() + ']'
+               resp_str + ']'
 
     @property
     def userid(self):
@@ -216,16 +223,13 @@ class HKGathering(telepot.helper.ChatHandler):
 
     def initiate_survey(self, poll_id, target_id, display_name):
         print('answer to: ' + target_id.__str__())
-        new_response = Response()
-        new_response.userid = target_id
-        new_response.display_name = display_name
-        new_response.preference = allPoll[poll_id].genNullResponse()
-        allPoll[poll_id].response[target_id.__str__()] = new_response
-        # allPoll[poll_id].response.append({target_id.__str__(): new_response})
 
-
-        print ('new_response: ' + new_response.__str__())
-        print ('saved resposne: ' + allPoll[poll_id].response[target_id.__str__()].__str__())
+        if target_id.__str__() not in allPoll[poll_id].response:
+            new_response = Response()
+            new_response.userid = target_id
+            new_response.display_name = display_name
+            new_response.preference = allPoll[poll_id].genNullResponse()
+            allPoll[poll_id].response[target_id.__str__()] = new_response
 
         show_keyboard = {'keyboard': [['開始']]}
         self.bot.sendMessage(target_id,
@@ -254,7 +258,7 @@ class HKGathering(telepot.helper.ChatHandler):
     def change_preference(self, poll_id, userid, pref_id):
         print('amend userid: ' + userid.__str__() + ' on preference: ' + pref_id.__str__())
         self._poll.response[userid.__str__()].preference[pref_id - 1] = not self._poll.response[userid.__str__()].preference[pref_id - 1]
-        allPoll[poll_id].response[userid] = self._poll.response[userid.__str__()]
+        allPoll[poll_id].response[userid.__str__()] = self._poll.response[userid.__str__()]
 
         self.start_survey(poll_id=poll_id, userid=userid)
 
@@ -353,6 +357,6 @@ class HKGathering(telepot.helper.ChatHandler):
 TOKEN = sys.argv[1]  # get token from command-line
 
 bot = telepot.DelegatorBot(TOKEN, [
-    (per_chat_id(), create_open(HKGathering, timeout=20)), ])
+    (per_chat_id(), create_open(HKGathering, timeout=60)), ])
 print('Listening ...')
 bot.notifyOnMessage(run_forever=True)
