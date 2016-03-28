@@ -91,7 +91,7 @@ class Poll():
         for each_choice in self.choices:
             choice_str = choice_str + ' - ' + each_choice
         for each_response in self.response:
-            response_str = response_str + '<' + each_response + '>'
+            response_str = response_str + '<' + self.response[each_response] + '>'
         return '[Poll_obj][question: ' + self.question + '][choice: ' + choice_str + '][group: ' + \
                self.groupId.__str__() + '][all_resp: ' + response_str + ']'
 
@@ -257,8 +257,8 @@ class HKGathering(telepot.helper.ChatHandler):
                         for poll_key in allPoll.keys():
                             print ('in_all_poll: ' + allPoll[poll_key].__str__())
                             for each_resp in allPoll[poll_key].response:
-                                print('each_resp: ' + each_resp.__str__())
-                                if each_resp.userid == msg['from']['id']:
+                                print('each_resp: ' + allPoll[poll_key][each_resp].__str__())
+                                if allPoll[poll_key][each_resp].userid == msg['from']['id']:
                                     found_poll = poll_key
                         if found_poll != 0:
                             self._converType = ConverType.response_poll
