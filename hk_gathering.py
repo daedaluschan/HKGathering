@@ -175,8 +175,8 @@ class Poll():
                 show_keyboard['keyboard'].append(['撐: /' + (i+1).__str__() + ' - ' + choice.encode('utf-8')])
             i = i + 1
 
-        show_keyboard['keyboard'][0].append(['加入新選項'])
-        show_keyboard['keyboard'][0].append(['完'])
+        show_keyboard['keyboard'].append(['加入新選項'])
+        show_keyboard['keyboard'].append(['完'])
         return  show_keyboard
 
 
