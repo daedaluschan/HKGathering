@@ -161,9 +161,13 @@ class Poll():
             preference_vector.append(False)
         return preference_vector
 
-    def genResponseKeyboard(self, current_response=genNullResponse()):
+    def genResponseKeyboard(self, current_response=[]):
         show_keyboard = {'keyboard': [[]]}
         i=0
+
+        if len(current_response) == 0:
+            current_response = self.genNullResponse()
+
         for choice in self.choices:
             if current_response[i]:
                 show_keyboard['keyboard'][0].append('反對: /' + (i+1).__str__() + ' - ' + choice)
