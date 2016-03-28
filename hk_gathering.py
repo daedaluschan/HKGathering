@@ -127,8 +127,7 @@ class Poll():
     def groupId(self, value):
         self._groupId = value
 
-    @property
-    def survey_str(self, response_attached=[]):
+    def gen_survey_str(self, response_attached=[]):
         choice_str = ''
         i = 1
         for choice in self.choices:
@@ -139,7 +138,6 @@ class Poll():
                 ' -- 現在回應：' + 'Yes' if response_attached[i-1] else 'No' +' \n'
             i += 1
 
-        print('after choice str is being constructed')
         survey_text = '依家問你：' + self.question.encode('utf-8') + '\n\n現有選擇係：\n\n' + choice_str + '\n'
 
         return survey_text
@@ -207,15 +205,15 @@ class HKGathering(telepot.helper.ChatHandler):
 
         show_keyboard = {'keyboard': [['開始']]}
         self.bot.sendMessage(target_id,
-                             text=self._poll.survey_str + '\n' +
+                             text=self._poll.gen_survey_str() + '\n' +
                                   '請用 /begin 或者用 pop up 鍵盤開始。',
                              reply_markup=show_keyboard)
 
     def start_survey(self, poll_id, userid):
         print('start survey with poll id: ' + poll_id)
         self._poll = allPoll[poll_id]
-        self.sender.sendMessage(text=self._poll.survey_str(response_attached=allPoll[poll_id].response[userid.__str__()].preference) +
-                                     '\n' + '或者用 /add_pref 加入新選項。')
+        self.sender.sendMessage(text=self._poll.gen_survey_str(response_attached=allPoll[poll_id].response[userid.__str__()].preference) +
+                                     '\n或者用 /add_pref 加入新選項。')
 
     def on_message(self, msg):
         print('on_message() is being called')
