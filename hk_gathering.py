@@ -136,9 +136,11 @@ class Poll():
                 choice_str = choice_str + '- ' + choice.encode('utf-8') + '\n'
             else:
                 choice_str = choice_str + '- /' + i.__str__() + ' ' + choice.encode('utf-8') + \
-                ' -- 現在回應：' + 'Yes\n'
-                # choice_str = choice_str + '- /' + i.__str__() + ' ' + choice.encode('utf-8') + \
-                # ' -- 現在回應：' + 'Yes' if response_attached[i-1] else 'No' +' \n'
+                ' -- 現在回應：'
+                if response_attached[i-1]:
+                    choice_str = choice_str + 'Yes\n'
+                else:
+                    choice_str = choice_str + 'No\n'
             i = i + 1
 
         survey_text = '依家問你：' + self.question.encode('utf-8') + '\n\n現有選擇係：\n\n' + choice_str + '\n'
