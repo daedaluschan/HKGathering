@@ -13,7 +13,8 @@ from types import *
 from enum import Enum
 import uuid
 
-from types import  *
+from re import compile
+import re
 
 # Constants & global data
 
@@ -234,7 +235,6 @@ class HKGathering(telepot.helper.ChatHandler):
 
     def start_survey(self, poll_id, userid):
         print('start survey with poll id: ' + poll_id)
-        self._poll = allPoll[poll_id]
 
         show_keyboard = self._poll.genResponseKeyboard(allPoll[poll_id].response[userid.__str__()].preference)
         self.sender.sendMessage(text=self._poll.gen_survey_str(response_attached=allPoll[poll_id].response[userid.__str__()].preference) +
@@ -242,6 +242,21 @@ class HKGathering(telepot.helper.ChatHandler):
                                      '或者用 /add_pref 加入新選項。\n\n' +
                                      '當完成時請用 /finish 。',
                                 reply_markup=show_keyboard)
+
+    def search_poll_id(self, userid):
+        found_poll = 0
+        for poll_key in allPoll.keys():
+            for each_resp in allPoll[poll_key].response:
+                if allPoll[poll_key].response[each_resp].userid == userid:
+                    found_poll = poll_key
+        return  found_poll
+
+    def change_preference(self, poll_id, userid, pref_id):
+        print('amend userid: ' + userid.__str__() + ' on preference: ' + pref_id.__str__())
+        self._poll.response[userid.__str__()].preference[pref_id - 1] = not self._poll.response[userid.__str__()].preference[pref_id - 1]
+        allPoll[poll_id].response[userid] = self._poll.response[userid.__str__()]
+
+        self.start_survey(poll_id=poll_id, userid=userid)
 
     def on_message(self, msg):
         print('on_message() is being called')
@@ -280,13 +295,8 @@ class HKGathering(telepot.helper.ChatHandler):
                                                      '或者用 /result 黎查詢回應統計。\n')
 
                     elif msg['text'].encode(encoding='utf-8') == '開始' or msg['text'].startswith('/begin'):
-                        found_poll = 0
-                        for poll_key in allPoll.keys():
-                            print ('in_all_poll: ' + allPoll[poll_key].__str__())
-                            for each_resp in allPoll[poll_key].response:
-                                print('each_resp: ' + allPoll[poll_key].response[each_resp].__str__())
-                                if allPoll[poll_key].response[each_resp].userid == msg['from']['id']:
-                                    found_poll = poll_key
+                        found_poll = self.search_poll_id(msg['from']['id'])
+                        self._poll = allPoll[found_poll]
                         if found_poll != 0:
                             self._converType = ConverType.response_poll
                             self.start_survey(found_poll, msg['from']['id'])
@@ -307,6 +317,15 @@ class HKGathering(telepot.helper.ChatHandler):
                             self._poll.choices.append(msg['text'])
                             self.sender.sendMessage(text='好，仲有冇？有就繼續 send 下個個選擇。\n' +
                                                          '如果冇就用 /done 完成建立問題。')
+
+                elif self._converType == ConverType.response_poll:
+                    found_poll = self.search_poll_id(msg['from']['id'])
+                    self._poll = allPoll[found_poll]
+                    match_obj = re.compile('\/(\d+)').match(msg['text'])
+                    if match_obj != None:
+                        self.change_preference(poll_id=found_poll,
+                                               userid = msg['from']['id'],
+                                               pref_id=(int)(match_obj.group(1)))
 
             elif content_type == 'text' and chat_type == 'group':
                 if msg['text'].startswith('/start@' + botName):
