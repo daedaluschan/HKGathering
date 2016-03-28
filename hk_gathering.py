@@ -139,7 +139,8 @@ class Poll():
                 ' -- 現在回應：' + 'Yes' if response_attached[i-1] else 'No' +' \n'
             i += 1
 
-        survey_text = '依家問你：' + self.question.encode('utf-8') + '\n\n' + '現有選擇係：\n\n' + choice_str + '\n'
+        print('after choice str is being constructed')
+        survey_text = '依家問你：' + self.question.encode('utf-8') + '\n\n現有選擇係：\n\n' + choice_str + '\n'
 
         return survey_text
 
