@@ -257,8 +257,8 @@ class HKGathering(telepot.helper.ChatHandler):
                         for poll_key in allPoll.keys():
                             print ('in_all_poll: ' + allPoll[poll_key].__str__())
                             for each_resp in allPoll[poll_key].response:
-                                print('each_resp: ' + allPoll[poll_key].reponse[each_resp].__str__())
-                                if allPoll[poll_key].reponse[each_resp].userid == msg['from']['id']:
+                                print('each_resp: ' + allPoll[poll_key].response[each_resp].__str__())
+                                if allPoll[poll_key].response[each_resp].userid == msg['from']['id']:
                                     found_poll = poll_key
                         if found_poll != 0:
                             self._converType = ConverType.response_poll
