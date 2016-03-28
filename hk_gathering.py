@@ -213,7 +213,7 @@ class HKGathering(telepot.helper.ChatHandler):
     def start_survey(self, poll_id, userid):
         print('start survey with poll id: ' + poll_id)
         self._poll = allPoll[poll_id]
-        self.sender.sendMessage(text=self._poll.survey_str(response_attached=allPoll[poll_id].response[userid.__str__()]) +
+        self.sender.sendMessage(text=self._poll.survey_str(response_attached=allPoll[poll_id].response[userid.__str__()].preference) +
                                      '\n' + '或者用 /add_pref 加入新選項。')
 
     def on_message(self, msg):
