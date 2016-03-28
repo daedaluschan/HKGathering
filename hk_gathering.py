@@ -321,7 +321,7 @@ class HKGathering(telepot.helper.ChatHandler):
                 elif self._converType == ConverType.response_poll:
                     found_poll = self.search_poll_id(msg['from']['id'])
                     self._poll = allPoll[found_poll]
-                    match_obj = re.compile('\/(\d+)').match(msg['text'])
+                    match_obj = re.compile('.*\/(\d+).*').match(msg['text'])
                     if match_obj != None:
                         self.change_preference(poll_id=found_poll,
                                                userid = msg['from']['id'],
