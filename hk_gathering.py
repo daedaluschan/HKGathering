@@ -189,10 +189,22 @@ class Poll():
 
     def genResponseStatus(self, poll_id,  completd_userid=0):
         status_str = ''
+        resp_str =''
+        for idx_choice, choice in enumerate(self.choices):
+            resp_count = 0
+            for each_resp in self.response:
+                if self.response[each_resp.__str__()].preference[idx_choice]:
+                    resp_count = idx_choice + 1
+            resp_str = resp_str + (idx_choice+1).__str__() + '. ' + choice.encode(encoding='utf-8') + \
+                       ' -- 有 ' + resp_count.__str__() + ' 個人贊成\n'
+
         if completd_userid != 0:
             status_str = status_str + self.response[completd_userid.__str__()].display_name + \
                          '　己原成作答，但你仍可以 ' + \
                          '/answer' +'_' + poll_id.encode(encoding='utf-8') + '　繼續回應。\n\n'
+
+        status_str = status_str + '問題係：' + self.question.encode(encoding='utf-8') + '\n\n' + \
+                     '現在的回應概況：\n\n' + resp_str.encode(encoding='utf-8')
         return status_str
 
 
@@ -270,6 +282,11 @@ class HKGathering(telepot.helper.ChatHandler):
 
         self.start_survey(poll_id=poll_id, userid=userid)
 
+    def finish_surey(self, poll_id, completd_userid=0):
+        print('completed surevey. responding back to group: ' + self._poll.groupId.__str__())
+        self.bot.sendMessage(self._poll.groupId, text=self._poll.genResponseStatus(poll_id=poll_id,
+                                                                  completd_userid=completd_userid))
+
     def on_message(self, msg):
         print('on_message() is being called')
         print('==== all poll in cache ====')
@@ -338,6 +355,9 @@ class HKGathering(telepot.helper.ChatHandler):
                         self.change_preference(poll_id=found_poll,
                                                userid = msg['from']['id'],
                                                pref_id=(int)(match_obj.group(1)))
+                    elif msg['text'] == '/finish' or msg['text'].encode(encoding='utf-8') == '完':
+                        self.finish_surey(poll_id=found_poll, completd_userid=msg['from']['id'])
+                        self._converType = ConverType.nothing
 
             elif content_type == 'text' and chat_type == 'group':
                 if msg['text'].startswith('/start@' + botName):
