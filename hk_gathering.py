@@ -23,9 +23,7 @@ botName = 'HKGathering_bot'
 start_private_url = 'https://telegram.me/' + botName + '?start='
 start_group_url = 'https://telegram.me/' + botName + '?startgroup='
 
-
 # Defining enums
-
 
 class ConverType(Enum):
     nothing = 1
@@ -37,7 +35,6 @@ class CreatePollFlow(Enum):
     not_start = 1
     poll_question = 2
     poll_choice = 3
-
 
 # Response data structure
 
@@ -83,7 +80,6 @@ class Response():
         self._display_name = value
 
 # Poll data structure
-
 
 class Poll():
     def __init__(self):
@@ -218,9 +214,7 @@ class Poll():
         print('DEBUG : after')
         return status_str
 
-
 # main class of message handling
-
 
 class HKGathering(telepot.helper.ChatHandler):
     def __init__(self, seed_tuple, timeout):
@@ -297,6 +291,8 @@ class HKGathering(telepot.helper.ChatHandler):
         print('completed surevey. responding back to group: ' + self._poll.groupId.__str__())
         self.bot.sendMessage(self._poll.groupId, text=self._poll.genResponseStatus(poll_id=poll_id,
                                                                   completd_userid=completd_userid))
+        self.sender.sendMessage(text=u'唔該，你的回應將會反映在 group 裡面。',
+                                reply_markup = {'hide_keyboard': True})
 
     def on_message(self, msg):
         print('on_message() is being called')
