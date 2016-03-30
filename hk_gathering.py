@@ -196,7 +196,7 @@ class Poll():
                 if self.response[each_resp.__str__()].preference[idx_choice]:
                     resp_count = idx_choice + 1
             resp_str = resp_str + (idx_choice+1).__str__() + '. ' + choice.encode(encoding='utf-8') + \
-                       ' -- 有 ' + resp_count.__str__() + ' 個人贊成\n'
+                       u' -- 有 ' + resp_count.__str__() + u' 個人贊成\n'
 
         if completd_userid != 0:
             status_str = status_str + self.response[completd_userid.__str__()].display_name.encode(encoding='utf-8') + \
