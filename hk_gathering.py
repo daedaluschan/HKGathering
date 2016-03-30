@@ -247,7 +247,8 @@ class HKGathering(telepot.helper.ChatHandler):
         print('DEBUG: show_keyboard')
         show_keyboard = {'keyboard': [['開始回應']]}
         print('DEBUG: sendMessage: ' + show_keyboard.__str__())
-        self.sender.sendMessage(text=self._poll.gen_survey_str().encode(encoding='utf-8') + '\n' +
+        print('DEBUG: gen_survey_str: ' + self._poll.gen_survey_str().encode(encoding='utf-8'))
+        self.sender.sendMessage(text=self._poll.gen_survey_str().encode(encoding='utf-8') + u'\n' +
                                      u'請用 ' + start_link.encode(encoding='utf-8') +
                                      u' ﹝如第一次用' + botName.encode(encoding='utf8') + u'﹞或者用 '+
                                      ans_link +  u' 回應問題。\n' +
