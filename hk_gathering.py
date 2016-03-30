@@ -200,8 +200,8 @@ class Poll():
 
         if completd_userid != 0:
             status_str = status_str + self.response[completd_userid.__str__()].display_name.encode(encoding='utf-8') + \
-                         ' 己原成作答，但你仍可以 '.encode(encoding='utf-8') + \
-                         '/answer' +'_' + poll_id.encode(encoding='utf-8') + ' 繼續回應。\n\n'.encode(encoding='utf-8')
+                         u' 己原成作答，但你仍可以 ' + \
+                         u'/answer' + u'_' + poll_id.encode(encoding='utf-8') + u' 繼續回應。\n\n'
 
         print('DEBUG : ' + self.response[completd_userid.__str__()].display_name.encode(encoding='utf-8'))
         print('DEBUG : ' + poll_id)
