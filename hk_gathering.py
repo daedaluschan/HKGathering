@@ -187,16 +187,20 @@ class Poll():
         show_keyboard['keyboard'].append(['完'])
         return  show_keyboard
 
-    def genResponseStatus(self, poll_id,  completd_userid=0):
+    def get_supporting_count(self, choice):
+        support_count = 0
+        for each_response in self.response:
+            if self.response[each_response].preference[choice]:
+                support_count = support_count + 1
+
+        return support_count
+
+    def genResponseStatus(self, poll_id, completd_userid=0):
         status_str = ''
         resp_str =''
         for idx_choice, choice in enumerate(self.choices):
-            resp_count = 0
-            for each_resp in self.response:
-                if self.response[each_resp.__str__()].preference[idx_choice]:
-                    resp_count = idx_choice + 1
             resp_str = resp_str + (idx_choice+1).__str__() + '. ' + choice.encode(encoding='utf-8') + \
-                       u' -- 有 ' + resp_count.__str__() + u' 個人贊成\n'
+                       u' -- 有 ' + self.get_supporting_count(idx_choice).__str__() + u' 個人贊成\n'
 
         if completd_userid != 0:
             status_str = status_str + self.response[completd_userid.__str__()].display_name.encode(encoding='utf-8') + \
