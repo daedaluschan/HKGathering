@@ -203,8 +203,13 @@ class Poll():
                          '　己原成作答，但你仍可以 ' + \
                          '/answer' +'_' + poll_id.encode(encoding='utf-8') + '　繼續回應。\n\n'
 
+        print('DEBUG : before')
+        print('DEBUG : ' + status_str.encode(encoding='utf8'))
+        print('DEBUG : ' + self.question.encode(encoding='utf8'))
+        print('DEBUG : ' + resp_str.encode(encoding='utf8'))
         status_str = status_str.encode(encoding='utf-8') + '問題係：' + self.question.encode(encoding='utf-8') + '\n\n' + \
                      '現在的回應概況：\n\n' + resp_str.encode(encoding='utf-8')
+        print('DEBUG : after')
         return status_str
 
 
