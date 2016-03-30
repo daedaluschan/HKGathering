@@ -242,7 +242,7 @@ class HKGathering(telepot.helper.ChatHandler):
         start_link = start_private_url + poll_id
         show_keyboard = {'keyboard': [['開始回應']]}
 
-        self.sender.sendMessage(text=self._poll.gen_survey_str() + '\n' +
+        self.sender.sendMessage(text=self._poll.gen_survey_str().encode(encoding='utf-8') + '\n' +
                                      u'請用 ' + start_link.encode(encoding='utf-8') +
                                      u' ﹝如第一次用' + botName.encode(encoding='utf8') + u'﹞或者用 '+
                                      ans_link +  u' 回應問題。\n' +
