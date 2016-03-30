@@ -238,10 +238,15 @@ class HKGathering(telepot.helper.ChatHandler):
         choice_str = ''
         for choice in self._poll.choices:
             choice_str = choice_str + choice.encode('utf-8') + '\n'
-        ans_link = '/answer' +'_' + poll_id.encode(encoding='utf-8')
+        print('DEBUG: ans_link')
+        ans_link = u'/answer' + u'_' + poll_id.encode(encoding='utf-8')
+        print('DEBUG: ans_link: ' + ans_link)
+        print('DEBUG: start_link')
         start_link = start_private_url + poll_id
+        print('DEBUG: start_link: ' + start_link)
+        print('DEBUG: show_keyboard')
         show_keyboard = {'keyboard': [['開始回應']]}
-
+        print('DEBUG: sendMessage: ' + show_keyboard.__str__())
         self.sender.sendMessage(text=self._poll.gen_survey_str().encode(encoding='utf-8') + '\n' +
                                      u'請用 ' + start_link.encode(encoding='utf-8') +
                                      u' ﹝如第一次用' + botName.encode(encoding='utf8') + u'﹞或者用 '+
