@@ -198,16 +198,13 @@ class Poll():
             resp_str = resp_str + (idx_choice+1).__str__() + '. ' + choice.encode(encoding='utf-8') + \
                        ' -- 有 ' + resp_count.__str__() + ' 個人贊成\n'
 
-        print ('DEBUG: after constructing choice str')
         if completd_userid != 0:
             status_str = status_str + self.response[completd_userid.__str__()].display_name.encode(encoding='utf-8') + \
                          '　己原成作答，但你仍可以 ' + \
                          '/answer' +'_' + poll_id.encode(encoding='utf-8') + '　繼續回應。\n\n'
 
-        print ('DEBUG: before constructing whole status str')
-        status_str = status_str + '問題係：' + self.question.encode(encoding='utf-8') + '\n\n' + \
+        status_str = status_str.encode(encoding='utf-8') + '問題係：' + self.question.encode(encoding='utf-8') + '\n\n' + \
                      '現在的回應概況：\n\n' + resp_str.encode(encoding='utf-8')
-        print ('DEBUG: after constructing whole status str')
         return status_str
 
 
