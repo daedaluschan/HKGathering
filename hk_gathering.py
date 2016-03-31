@@ -269,6 +269,7 @@ class HKGathering(telepot.helper.ChatHandler):
         print('DEBUG: construct keyboard')
         show_keyboard = self._poll.genResponseKeyboard(allPoll[poll_id].response[userid.__str__()].preference)
         print('DEBUG: sendMessage')
+        print('DEBUG: gen_survey_str: ' + self._poll.gen_survey_str(response_attached=allPoll[poll_id].response[userid.__str__()].preference).encode(encoding='utf-8'))
         self.sender.sendMessage(text=self._poll.gen_survey_str(response_attached=allPoll[poll_id].response[userid.__str__()].preference).encode(encoding='utf-8') +
                                      '\n你可以用 / 〈數字〉更改你對相關選項的回應，用 pop up 鍵盤亦可。\n' +
                                      '或者用 /add_pref 加入新選項。\n\n' +
