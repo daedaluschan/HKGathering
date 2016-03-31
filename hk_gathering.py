@@ -132,22 +132,22 @@ class Poll():
         self._groupId = value
 
     def gen_survey_str(self, response_attached=[]):
-        choice_str = ''
+        choice_str = u''
         i = 1
         print(self.choices)
         for choice in self.choices:
             if len(response_attached) == 0:
-                choice_str = choice_str.encode(encoding='utf-8') + '- ' + choice.encode('utf-8') + '\n'
+                choice_str = chkNConv(choice_str) + '- ' + chkNConv(choice) + '\n'
             else:
-                choice_str = choice_str.encode(encoding='utf-8') + '- /' + i.__str__() + ' ' + choice.encode('utf-8') + \
-                ' -- 現在回應：'
+                choice_str = chkNConv(choice_str) + '- /' + i.__str__() + ' ' + chkNConv(choice) + \
+                u' -- 現在回應：'
                 if response_attached[i-1]:
-                    choice_str = choice_str.encode(encoding='utf-8') + 'Yes\n'
+                    choice_str = chkNConv(choice_str) + u'Yes\n'
                 else:
-                    choice_str = choice_str.encode(encoding='utf-8') + 'No\n'
+                    choice_str = chkNConv(choice_str) + u'No\n'
             i = i + 1
 
-        survey_text = '依家問你：' + self.question.encode('utf-8') + '\n\n現有選擇係：\n\n' + choice_str.encode(encoding='utf-8')
+        survey_text = u'依家問你：' + chkNConv(self.question) + u'\n\n現有選擇係：\n\n' + chkNConv(choice_str)
 
         return survey_text
 
@@ -235,16 +235,16 @@ class HKGathering(telepot.helper.ChatHandler):
     def get_invited(self, poll_id):
         self._poll = allPoll[poll_id]
         print('Linked poll: ' + self._poll.__str__())
-        choice_str = ''
+        choice_str = u''
         for choice in self._poll.choices:
-            choice_str = choice_str + choice.encode('utf-8') + '\n'
-        ans_link = u'/answer' + u'_' + poll_id.encode(encoding='utf-8')
+            choice_str = choice_str + chkNConv(choice) + '\n'
+        ans_link = u'/answer' + u'_' + chkNConv(poll_id)
         start_link = start_private_url + poll_id
-        show_keyboard = {'keyboard': [['開始回應'], ['統計'], ['結束提問']]}
-        self.sender.sendMessage(text=self._poll.gen_survey_str() + '\n' +
-                                     '請用 ' + start_link.encode(encoding='utf-8') +
-                                     ' \n回應問題。\n' +
-                                     '或者用 pop up 鍵盤作其他操作。',
+        show_keyboard = {'keyboard': [[u'開始回應'], [u'統計'], [u'結束提問']]}
+        self.sender.sendMessage(text= chkNConv(self._poll.gen_survey_str()) + u'\n' +
+                                     u'請用 ' + chkNConv(start_link) +
+                                     u' \n回應問題。\n' +
+                                     u'或者用 pop up 鍵盤作其他操作。',
                                 reply_markup=show_keyboard)
 
     def initiate_survey(self, poll_id, target_id, display_name):
