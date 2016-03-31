@@ -250,12 +250,12 @@ class HKGathering(telepot.helper.ChatHandler):
         print('DEBUG: gen_survey_str: ' + self._poll.gen_survey_str())
         print('DEBUG: whole text: ' + self._poll.gen_survey_str() + '\n' +
               '請用 ' + start_link.encode(encoding='utf-8') +
-              ' ﹝如第一次用' + botName.encode(encoding='utf8') + '﹞或者用 ' + ans_link +
+              ' ﹝如第一次用' + botName.encode(encoding='utf8') + '﹞或者用 ' + ans_link.encode(encoding='utf-8') +
               ' 回應問題。\n')
         self.sender.sendMessage(text=self._poll.gen_survey_str() + '\n' +
                                      '請用 ' + start_link.encode(encoding='utf-8') +
                                      ' ﹝如第一次用' + botName.encode(encoding='utf8') + '﹞或者用 '+
-                                     ans_link +  ' 回應問題。\n' +
+                                     ans_link.encode(encoding='utf-8') +  ' 回應問題。\n' +
                                      '或者用 pop up 鍵盤開始回應。',
                                 reply_markup=show_keyboard)
 
