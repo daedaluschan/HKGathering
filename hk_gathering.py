@@ -238,20 +238,9 @@ class HKGathering(telepot.helper.ChatHandler):
         choice_str = ''
         for choice in self._poll.choices:
             choice_str = choice_str + choice.encode('utf-8') + '\n'
-        print('DEBUG: ans_link')
         ans_link = u'/answer' + u'_' + poll_id.encode(encoding='utf-8')
-        print('DEBUG: ans_link: ' + ans_link)
-        print('DEBUG: start_link')
         start_link = start_private_url + poll_id
-        print('DEBUG: start_link: ' + start_link)
-        print('DEBUG: show_keyboard')
         show_keyboard = {'keyboard': [['開始回應']]}
-        print('DEBUG: sendMessage: ' + show_keyboard.__str__())
-        print('DEBUG: gen_survey_str: ' + self._poll.gen_survey_str())
-        print('DEBUG: whole text: ' + self._poll.gen_survey_str() + '\n' +
-              '請用 ' + start_link.encode(encoding='utf-8') +
-              ' ﹝如第一次用' + botName.encode(encoding='utf8') + '﹞或者用 ' + ans_link.encode(encoding='utf-8') +
-              ' 回應問題。\n')
         self.sender.sendMessage(text=self._poll.gen_survey_str() + '\n' +
                                      '請用 ' + start_link.encode(encoding='utf-8') +
                                      ' ﹝如第一次用' + botName.encode(encoding='utf8') + '﹞或者用 '+
@@ -351,6 +340,12 @@ class HKGathering(telepot.helper.ChatHandler):
                             self.start_survey(found_poll, msg['from']['id'])
                         else:
                             self.sender.sendMessage(text='搵唔到你的問題。')
+                    elif re.compile('/start\s(\w)+').match(msg['text']) != None:
+                        match_obj = re.compile('/start\s(\w+)').match(msg['text'])
+                        found_poll = match_obj.group(1)
+                        print('start from deep link on poll: ' + found_poll)
+                        self.initiate_survey(poll_id=found_poll, target_id=msg['from']['id'],
+                                             display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
                     else:
                         self.sender.sendMessage(text='唔知你想點，麻煩你再試過。\n' +
                                                      '或者用 /help 睇其他選項。')
