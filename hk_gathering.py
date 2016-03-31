@@ -240,7 +240,7 @@ class HKGathering(telepot.helper.ChatHandler):
             choice_str = choice_str + choice.encode('utf-8') + '\n'
         ans_link = u'/answer' + u'_' + poll_id.encode(encoding='utf-8')
         start_link = start_private_url + poll_id
-        show_keyboard = {'keyboard': [['開始回應']]}
+        show_keyboard = {'keyboard': [['開始回應 :' + ans_link.encode(encoding='utf-8')]]}
         self.sender.sendMessage(text=self._poll.gen_survey_str() + '\n' +
                                      '請用 ' + start_link.encode(encoding='utf-8') +
                                      ' ﹝如第一次用' + botName.encode(encoding='utf8') + '﹞或者用 '+
@@ -340,8 +340,8 @@ class HKGathering(telepot.helper.ChatHandler):
                             self.start_survey(found_poll, msg['from']['id'])
                         else:
                             self.sender.sendMessage(text='搵唔到你的問題。')
-                    elif re.compile('/start\s(\w)+').match(msg['text']) != None:
-                        match_obj = re.compile('/start\s(\w+)').match(msg['text'])
+                    elif re.compile('.*/start\s(\w)+').match(msg['text']) != None:
+                        match_obj = re.compile('.*/start\s(\w+)').match(msg['text'])
                         found_poll = match_obj.group(1)
                         print('start from deep link on poll: ' + found_poll)
                         self.initiate_survey(poll_id=found_poll, target_id=msg['from']['id'],
