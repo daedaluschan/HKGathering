@@ -15,7 +15,7 @@ import uuid
 
 from re import compile
 import re
-
+from gathering_util import chkNConv
 # Constants & global data
 
 allPoll = {}
