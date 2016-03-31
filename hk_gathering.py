@@ -137,17 +137,17 @@ class Poll():
         print(self.choices)
         for choice in self.choices:
             if len(response_attached) == 0:
-                choice_str = choice_str + '- ' + choice.encode('utf-8') + '\n'
+                choice_str = choice_str.encode(encoding='utf-8') + '- ' + choice.encode('utf-8') + '\n'
             else:
-                choice_str = choice_str + '- /' + i.__str__() + ' ' + choice.encode('utf-8') + \
+                choice_str = choice_str.encode(encoding='utf-8') + '- /' + i.__str__() + ' ' + choice.encode('utf-8') + \
                 ' -- 現在回應：'
                 if response_attached[i-1]:
-                    choice_str = choice_str + 'Yes\n'
+                    choice_str = choice_str.encode(encoding='utf-8') + 'Yes\n'
                 else:
-                    choice_str = choice_str + 'No\n'
+                    choice_str = choice_str.encode(encoding='utf-8') + 'No\n'
             i = i + 1
 
-        survey_text = '依家問你：' + self.question.encode('utf-8') + '\n\n現有選擇係：\n\n' + choice_str
+        survey_text = '依家問你：' + self.question.encode('utf-8') + '\n\n現有選擇係：\n\n' + choice_str.encode(encoding='utf-8')
 
         return survey_text
 
