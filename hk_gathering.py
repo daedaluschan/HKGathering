@@ -421,7 +421,7 @@ class HKGathering(telepot.helper.ChatHandler):
                 elif chkNConv(msg['text']) == u'結束提問':
                     poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
                     self._poll = allPoll[poll_id]
-
+                    self.end_poll(poll_id=poll_id)
 
             print('Poll:' + self._poll.__str__())
         else:
