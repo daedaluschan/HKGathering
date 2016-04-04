@@ -389,9 +389,9 @@ class HKGathering(telepot.helper.ChatHandler):
                                          target_id=msg['from']['id'],
                                          display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
                 elif chkNConv(msg['text']) == u'開始回應':
-                    # orig_text = msg['reply_to_message']['text']
-                    # poll_id = orig_text.split(u'https://telegram.me/' + chkNConv(botName) + u'?start=')[1].split(u' ')[0]
-                    self.sender.sendMessage(text=self._poll.gen_start_survey_str())
+                    orig_text = msg['reply_to_message']['text']
+                    poll_id = orig_text.split(u'https://telegram.me/' + chkNConv(botName) + u'?start=')[1].split(u' ')[0]
+                    self.sender.sendMessage(text=self._poll.gen_start_survey_str(poll_id=poll_id))
 
             print('Poll:' + self._poll.__str__())
         else:
