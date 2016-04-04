@@ -151,7 +151,7 @@ class Poll():
 
         return survey_text
 
-    def gen_start_survey_str(self):
+    def gen_start_survey_str(self, poll_id):
         start_link = start_private_url + poll_id
         return u'請用 ' + chkNConv(start_link) + u' \n\n回應問題。或者用 pop up 鍵盤作其他操作。'
 
@@ -245,7 +245,7 @@ class HKGathering(telepot.helper.ChatHandler):
         ans_link = u'/answer' + u'_' + chkNConv(poll_id)
         show_keyboard = {'keyboard': [[u'開始回應'], [u'統計'], [u'結束提問']]}
         self.sender.sendMessage(text= chkNConv(self._poll.gen_survey_str()) + u'\n' +
-                                      self._poll.gen_start_survey_str(),
+                                      self._poll.gen_start_survey_str(poll_id=poll_id),
                                 reply_markup=show_keyboard)
 
     def initiate_survey(self, poll_id, target_id, display_name):
