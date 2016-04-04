@@ -151,6 +151,10 @@ class Poll():
 
         return survey_text
 
+    def gen_start_survey_str(self):
+        start_link = start_private_url + poll_id
+        return u'請用 ' + chkNConv(start_link) + u' \n\n回應問題。或者用 pop up 鍵盤作其他操作。'
+
     @property
     def response(self):
         return self._response
@@ -239,11 +243,9 @@ class HKGathering(telepot.helper.ChatHandler):
         for choice in self._poll.choices:
             choice_str = choice_str + chkNConv(choice) + '\n'
         ans_link = u'/answer' + u'_' + chkNConv(poll_id)
-        start_link = start_private_url + poll_id
         show_keyboard = {'keyboard': [[u'開始回應'], [u'統計'], [u'結束提問']]}
         self.sender.sendMessage(text= chkNConv(self._poll.gen_survey_str()) + u'\n' +
-                                     u'請用 ' + chkNConv(start_link) +
-                                     u' \n\n回應問題。或者用 pop up 鍵盤作其他操作。',
+                                      self._poll.gen_start_survey_str(),
                                 reply_markup=show_keyboard)
 
     def initiate_survey(self, poll_id, target_id, display_name):
@@ -387,11 +389,9 @@ class HKGathering(telepot.helper.ChatHandler):
                                          target_id=msg['from']['id'],
                                          display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
                 elif chkNConv(msg['text']) == '開始回應':
-                    orig_text = msg['reply_to_message']['text']
-                    poll_id = orig_text.split(u'https://telegram.me/' + chkNConv(botName) + u'?start=')[1].split(u' ')[0]
-                    self.initiate_survey(poll_id,
-                                         target_id=msg['from']['id'],
-                                         display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
+                    # orig_text = msg['reply_to_message']['text']
+                    # poll_id = orig_text.split(u'https://telegram.me/' + chkNConv(botName) + u'?start=')[1].split(u' ')[0]
+                    self.sender.sendMessage(text=self._poll.gen_start_survey_str())
 
             print('Poll:' + self._poll.__str__())
         else:
