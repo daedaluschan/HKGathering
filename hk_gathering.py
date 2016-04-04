@@ -407,9 +407,11 @@ class HKGathering(telepot.helper.ChatHandler):
                                          display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
                 elif chkNConv(msg['text']) == u'開始回應':
                     poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
+                    self._poll = allPoll[poll_id]
                     self.sender.sendMessage(text=self._poll.gen_start_survey_str(poll_id=poll_id))
                 elif chkNConv(msg['text']) == u'統計':
                     poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
+                    self._poll = allPoll[poll_id]
                     self.sender.sendMessage(text=self._poll.genResponseStatus(poll_id))
 
             print('Poll:' + self._poll.__str__())
