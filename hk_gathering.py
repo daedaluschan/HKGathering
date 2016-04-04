@@ -306,6 +306,9 @@ class HKGathering(telepot.helper.ChatHandler):
             allPoll[poll_id].response[each_response].preference.append(False)
         self.change_preference(poll_id=poll_id, userid=userid, pref_id=len(allPoll[poll_id].choices))
 
+    def end_poll(self, poll_id):
+        print('End Poll: ' + poll_id)
+
     def on_message(self, msg):
         print('on_message() is being called')
         print('==== all poll in cache ====')
@@ -413,6 +416,10 @@ class HKGathering(telepot.helper.ChatHandler):
                     poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
                     self._poll = allPoll[poll_id]
                     self.sender.sendMessage(text=self._poll.genResponseStatus(poll_id))
+                elif chkNConv(msg['text']) == u'結束提問':
+                    poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
+                    self._poll = allPoll[poll_id]
+
 
             print('Poll:' + self._poll.__str__())
         else:
