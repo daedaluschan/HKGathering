@@ -302,12 +302,14 @@ class HKGathering(telepot.helper.ChatHandler):
     def add_pref(self, poll_id, new_pref, userid):
         print('Add new pref for poll [ ' + poll_id + ' ]. New pref : ' + chkNConv(new_pref))
         allPoll[poll_id].choices.append(new_pref)
-        for  each_response in allPoll[poll_id].response:
+        for each_response in allPoll[poll_id].response:
             allPoll[poll_id].response[each_response].preference.append(False)
         self.change_preference(poll_id=poll_id, userid=userid, pref_id=len(allPoll[poll_id].choices))
 
     def end_poll(self, poll_id):
         print('End Poll: ' + poll_id)
+        self.sender.sendMessage(u'提問已完結。\n\n' + self._poll.genResponseStatus(poll_id=poll_id))
+        del allPoll[poll_id]
 
     def on_message(self, msg):
         print('on_message() is being called')
