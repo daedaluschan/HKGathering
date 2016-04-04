@@ -196,26 +196,21 @@ class Poll():
         return support_count
 
     def genResponseStatus(self, poll_id, completd_userid=0):
-        status_str = ''
-        resp_str =''
+        status_str = u''
+        resp_str =u''
         for idx_choice, choice in enumerate(self.choices):
-            resp_str = resp_str + (idx_choice+1).__str__() + '. ' + choice.encode(encoding='utf-8') + \
-                       u' -- 有 ' + self.get_supporting_count(idx_choice).__str__() + u' 個人贊成\n'
+            resp_str = chkNConv(resp_str) + chkNConv((idx_choice+1).__str__()) + u'. ' + \
+                       chkNConv(choice) + u' -- 有 ' + chkNConv(self.get_supporting_count(idx_choice).__str__()) + \
+                       u' 個人贊成\n'
 
         if completd_userid != 0:
-            status_str = status_str + self.response[completd_userid.__str__()].display_name.encode(encoding='utf-8') + \
+            status_str = chkNConv(status_str) + chkNConv(self.response[completd_userid.__str__()].display_name) + \
                          u' 己原成作答，但你仍可以 ' + \
-                         u'/answer' + u'_' + poll_id.encode(encoding='utf-8') + u' 繼續回應。\n\n'
+                         chkNConv(start_private_url) + chkNConv(poll_id) + u' 繼續回應。\n\n'
 
-        print('DEBUG : ' + self.response[completd_userid.__str__()].display_name.encode(encoding='utf-8'))
-        print('DEBUG : ' + poll_id)
-        print('DEBUG : before')
-        print('DEBUG : ' + status_str.encode(encoding='utf8'))
-        print('DEBUG : ' + self.question.encode(encoding='utf8'))
-        print('DEBUG : ' + resp_str.encode(encoding='utf8'))
-        status_str = status_str.encode(encoding='utf-8') + '問題係：' + self.question.encode(encoding='utf-8') + '\n\n' + \
-                     '現在的回應概況：\n\n' + resp_str.encode(encoding='utf-8')
-        print('DEBUG : after')
+        status_str = chkNConv(status_str) + '問題係：' + chkNConv(self.question) + u'\n\n' + \
+                     u'現在的回應概況：\n\n' + chkNConv(resp_str)
+
         return status_str
 
 # main class of message handling
