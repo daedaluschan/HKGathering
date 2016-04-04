@@ -294,6 +294,9 @@ class HKGathering(telepot.helper.ChatHandler):
         self.sender.sendMessage(text=u'唔該，你的回應將會反映在 group 裡面。',
                                 reply_markup = {'hide_keyboard': True})
 
+    def extract_poll_id_from_chat(self, chat_msg):
+        return chat_msg.split(u'https://telegram.me/' + chkNConv(botName) + u'?start=')[1].split(u' ')[0]
+
     def on_message(self, msg):
         print('on_message() is being called')
         print('==== all poll in cache ====')
@@ -384,9 +387,11 @@ class HKGathering(telepot.helper.ChatHandler):
                                          target_id=msg['from']['id'],
                                          display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
                 elif chkNConv(msg['text']) == u'開始回應':
-                    orig_text = msg['reply_to_message']['text']
-                    poll_id = orig_text.split(u'https://telegram.me/' + chkNConv(botName) + u'?start=')[1].split(u' ')[0]
+                    poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
                     self.sender.sendMessage(text=self._poll.gen_start_survey_str(poll_id=poll_id))
+                elif chkNConv(msg['text']) == u'統計':
+                    poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
+                    self.sender.sendMessage(text=self._poll.genResponseStatus(poll_id))
 
             print('Poll:' + self._poll.__str__())
         else:
