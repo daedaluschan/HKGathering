@@ -29,6 +29,7 @@ class ConverType(Enum):
     nothing = 1
     create_poll = 2
     response_poll = 3
+    add_pref = 4
 
 
 class CreatePollFlow(Enum):
@@ -297,6 +298,16 @@ class HKGathering(telepot.helper.ChatHandler):
     def extract_poll_id_from_chat(self, chat_msg):
         return chat_msg.split(u'https://telegram.me/' + chkNConv(botName) + u'?start=')[1].split(u' ')[0]
 
+    def ask_for_new_pref(self):
+        self.sender.sendMessage(text=u'話俾我知你仲有 d 乜野 suggestion。')
+
+    def add_pref(self, poll_id, new_pref, user_id):
+        print('Add new pref for poll [ ' + poll_id + ' ]. New pref : ' + chkNConv(new_pref))
+        allPoll[poll_id].choices.append(new_pref)
+        for  each_response in allPoll[poll_id].response:
+            allPoll[poll_id].response[each_response].preference.append(False)
+        self.change_preference(poll_id=poll_id, userid=user_id, pref_id=len(allPoll[poll_id].choices))
+
     def on_message(self, msg):
         print('on_message() is being called')
         print('==== all poll in cache ====')
@@ -374,6 +385,14 @@ class HKGathering(telepot.helper.ChatHandler):
                     elif msg['text'] == '/finish' or msg['text'].encode(encoding='utf-8') == '完':
                         self.finish_surey(poll_id=found_poll, completd_userid=msg['from']['id'])
                         self._converType = ConverType.nothing
+                    elif chkNConv(msg['text']) == u'/add_pref' or chkNConv(msg['text']) == u'加入新選項':
+                        self.ask_for_new_pref()
+                        self._converType = ConverType.add_pref
+
+                elif self._converType == ConverType.add_pref:
+                    found_poll = self.search_poll_id(msg['from']['id'])
+                    self.add_pref(poll_id=found_poll, new_pref=chkNConv(msg['text']))
+                    self._converType = ConverType.response_poll
 
             elif content_type == 'text' and chat_type == 'group':
                 if msg['text'].startswith('/start@' + botName):
