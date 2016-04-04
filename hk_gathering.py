@@ -308,7 +308,7 @@ class HKGathering(telepot.helper.ChatHandler):
 
     def end_poll(self, poll_id):
         print('End Poll: ' + poll_id)
-        self.sender.sendMessage(u'提問已完結。\n\n' + self._poll.genResponseStatus(poll_id=poll_id))
+        self.sender.sendMessage(u'提問已完結。\n\n' + chkNConv(self._poll.genResponseStatus(poll_id=poll_id)))
         del allPoll[poll_id]
 
     def on_message(self, msg):
