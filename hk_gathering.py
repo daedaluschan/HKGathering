@@ -208,7 +208,7 @@ class Poll():
                          u' 己原成作答，但你仍可以 ' + \
                          chkNConv(start_private_url) + chkNConv(poll_id) + u' 繼續回應。\n\n'
 
-        status_str = chkNConv(status_str) + '問題係：' + chkNConv(self.question) + u'\n\n' + \
+        status_str = chkNConv(status_str) + u'問題係：' + chkNConv(self.question) + u'\n\n' + \
                      u'現在的回應概況：\n\n' + chkNConv(resp_str)
 
         return status_str
