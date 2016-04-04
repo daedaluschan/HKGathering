@@ -252,14 +252,14 @@ class HKGathering(telepot.helper.ChatHandler):
         if target_id.__str__() not in allPoll[poll_id].response:
             new_response = Response()
             new_response.userid = target_id
-            new_response.display_name = display_name
+            new_response.display_name = chkNConv(display_name)
             new_response.preference = allPoll[poll_id].genNullResponse()
             allPoll[poll_id].response[target_id.__str__()] = new_response
 
-        show_keyboard = {'keyboard': [['開始']]}
+        show_keyboard = {u'keyboard': [[u'開始']]}
         self.bot.sendMessage(target_id,
-                             text=self._poll.gen_survey_str() + '\n' +
-                                  '請用 /begin 或者用 pop up 鍵盤開始。',
+                             text=chkNConv(self._poll.gen_survey_str()) + u'\n' +
+                                  u'請用 /begin 或者用 pop up 鍵盤開始。',
                              reply_markup=show_keyboard)
 
     def start_survey(self, poll_id, userid):
