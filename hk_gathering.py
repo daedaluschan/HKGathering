@@ -247,6 +247,8 @@ class HKGathering(telepot.helper.ChatHandler):
     def initiate_survey(self, poll_id, target_id, display_name):
         print('answer to: ' + target_id.__str__())
 
+        self._poll = allPoll[poll_id]
+
         if target_id.__str__() not in allPoll[poll_id].response:
             new_response = Response()
             new_response.userid = target_id
@@ -350,16 +352,17 @@ class HKGathering(telepot.helper.ChatHandler):
                                                      '或者用 /result 黎查詢回應統計。\n')
 
                     elif msg['text'].encode(encoding='utf-8') == '開始' or msg['text'].startswith('/begin'):
-                        found_poll = self.search_poll_id(msg['from']['id'])
-                        self._poll = allPoll[found_poll]
-                        if found_poll != 0:
+                        # found_poll = self.search_poll_id(msg['from']['id'])
+                        # self._poll = allPoll[found_poll]
+                        if self.__uid != '':
                             self._converType = ConverType.response_poll
-                            self.start_survey(found_poll, msg['from']['id'])
+                            self.start_survey(self.__uid, msg['from']['id'])
                         else:
-                            self.sender.sendMessage(text='搵唔到你的問題。')
+                            self.sender.sendMessage(text='搵唔返你個問題。請返 group 度再 link 過返來。')
                     elif re.compile('.*/start\s(\w)+').match(msg['text']) != None:
                         match_obj = re.compile('.*/start\s(\w+)').match(msg['text'])
                         found_poll = match_obj.group(1)
+                        self.__uid = found_poll
                         print('start from deep link on poll: ' + found_poll)
                         self.initiate_survey(poll_id=found_poll, target_id=msg['from']['id'],
                                              display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
@@ -381,7 +384,7 @@ class HKGathering(telepot.helper.ChatHandler):
                                                          '如果冇就用 /done 完成建立問題。')
 
                 elif self._converType == ConverType.response_poll:
-                    found_poll = self.search_poll_id(msg['from']['id'])
+                    found_poll = self.__uid
                     self._poll = allPoll[found_poll]
                     match_obj = re.compile('.*\/(\d+).*').match(msg['text'])
                     if match_obj != None:
@@ -396,7 +399,7 @@ class HKGathering(telepot.helper.ChatHandler):
                         self._converType = ConverType.add_pref
 
                 elif self._converType == ConverType.add_pref:
-                    found_poll = self.search_poll_id(msg['from']['id'])
+                    found_poll = self.__uid
                     self.add_pref(poll_id=found_poll,
                                   new_pref=chkNConv(msg['text']),
                                   userid = msg['from']['id'])
