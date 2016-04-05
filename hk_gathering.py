@@ -230,7 +230,7 @@ class HKGathering(telepot.helper.ChatHandler):
         allPoll[self.__uid] = self._poll
         self.sender.sendMessage(text='用呢條 link 將問題放落 chat group 裡邊：\n' +
                                      start_group_url + self.__uid)
-        self._converType = ConverType.nothing
+        # self._converType = ConverType.nothing
 
     def get_invited(self, poll_id):
         self._poll = allPoll[poll_id]
@@ -276,7 +276,7 @@ class HKGathering(telepot.helper.ChatHandler):
             for each_resp in allPoll[poll_key].response:
                 if allPoll[poll_key].response[each_resp].userid == userid:
                     found_poll = poll_key
-        return  found_poll
+        return found_poll
 
     def change_preference(self, poll_id, userid, pref_id):
         print('amend userid: ' + userid.__str__() + ' on preference: ' + pref_id.__str__())
@@ -339,6 +339,7 @@ class HKGathering(telepot.helper.ChatHandler):
                                                      '用 /new 黎 create 一個新問題，' +
                                                      '或者用 /help 睇其他選項。')
                     elif msg['text'] == '/new':
+                        self._poll = Poll()
                         self._converType = ConverType.create_poll
                         self._createPollFlow = CreatePollFlow.poll_question
                         self._poll.creatorId = msg['from']['id']
@@ -368,6 +369,7 @@ class HKGathering(telepot.helper.ChatHandler):
                 elif self._converType == ConverType.create_poll:
                     if msg['text'] == '/done':
                         self.complte_poll_creation()
+                        self._converType = ConverType.nothing
                     elif msg['text'] != '':
                         if self._createPollFlow == CreatePollFlow.poll_question:
                             self._poll.question = msg['text']
