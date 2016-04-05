@@ -247,20 +247,23 @@ class HKGathering(telepot.helper.ChatHandler):
     def initiate_survey(self, poll_id, target_id, display_name):
         print('answer to: ' + target_id.__str__())
 
-        self._poll = allPoll[poll_id]
+        if poll_id not in allPoll:
+            self.sender.sendMessage(text=u'搵唔返你個問題。好大可能已經完左。')
+        else:
+            self._poll = allPoll[poll_id]
 
-        if target_id.__str__() not in allPoll[poll_id].response:
-            new_response = Response()
-            new_response.userid = target_id
-            new_response.display_name = chkNConv(display_name)
-            new_response.preference = allPoll[poll_id].genNullResponse()
-            allPoll[poll_id].response[target_id.__str__()] = new_response
+            if target_id.__str__() not in allPoll[poll_id].response:
+                new_response = Response()
+                new_response.userid = target_id
+                new_response.display_name = chkNConv(display_name)
+                new_response.preference = allPoll[poll_id].genNullResponse()
+                allPoll[poll_id].response[target_id.__str__()] = new_response
 
-        show_keyboard = {u'keyboard': [[u'開始']]}
-        self.bot.sendMessage(target_id,
-                             text=chkNConv(self._poll.gen_survey_str()) + u'\n' +
-                                  u'請用 /begin 或者用 pop up 鍵盤開始。',
-                             reply_markup=show_keyboard)
+            show_keyboard = {u'keyboard': [[u'開始']]}
+            self.bot.sendMessage(target_id,
+                                 text=chkNConv(self._poll.gen_survey_str()) + u'\n' +
+                                      u'請用 /begin 或者用 pop up 鍵盤開始。',
+                                 reply_markup=show_keyboard)
 
     def start_survey(self, poll_id, userid):
         print('start survey with poll id: ' + poll_id)
