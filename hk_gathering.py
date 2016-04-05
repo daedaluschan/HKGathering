@@ -440,6 +440,6 @@ class HKGathering(telepot.helper.ChatHandler):
 TOKEN = sys.argv[1]  # get token from command-line
 
 bot = telepot.DelegatorBot(TOKEN, [
-    (per_chat_id(), create_open(HKGathering, timeout=60)), ])
+    (per_chat_id(), create_open(HKGathering, timeout=600)), ])
 print('Listening ...')
 bot.notifyOnMessage(run_forever=True)
