@@ -311,11 +311,14 @@ class HKGathering(telepot.helper.ChatHandler):
             allPoll[poll_id].response[each_response].preference.append(False)
         self.change_preference(poll_id=poll_id, userid=userid, pref_id=len(allPoll[poll_id].choices))
 
-    def end_poll(self, poll_id):
-        print('End Poll: ' + poll_id)
-        self.sender.sendMessage(text=u'提問已完結。\n\n' + chkNConv(self._poll.genResponseStatus(poll_id=poll_id)),
-                                reply_markup={'hide_keyboard': True})
-        del allPoll[poll_id]
+    def end_poll(self, poll_id, userid):
+        if userid == allPoll[poll_id].creatorId:
+            print('End Poll: ' + poll_id)
+            self.sender.sendMessage(text=u'提問已完結。\n\n' + chkNConv(self._poll.genResponseStatus(poll_id=poll_id)),
+                                    reply_markup={'hide_keyboard': True})
+            del allPoll[poll_id]
+        else:
+            self.sender.sendMessage(text=u'唔好意思，只有開 post 者可以結束提問。')
 
     def on_message(self, msg):
         print('on_message() is being called')
@@ -430,7 +433,7 @@ class HKGathering(telepot.helper.ChatHandler):
                 elif chkNConv(msg['text']) == u'結束提問':
                     poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
                     self._poll = allPoll[poll_id]
-                    self.end_poll(poll_id=poll_id)
+                    self.end_poll(poll_id=poll_id, userid=msg['from']['id'])
 
             print('Poll:' + self._poll.__str__())
         else:
