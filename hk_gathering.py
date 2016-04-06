@@ -370,8 +370,10 @@ class HKGathering(telepot.helper.ChatHandler):
                         found_poll = match_obj.group(1)
                         self.__uid = found_poll
                         print('start from deep link on poll: ' + found_poll)
+                        # self.initiate_survey(poll_id=found_poll, target_id=msg['from']['id'],
+                        #                      display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
                         self.initiate_survey(poll_id=found_poll, target_id=msg['from']['id'],
-                                             display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
+                                             display_name=msg['from']['first_name'])
                     else:
                         self.sender.sendMessage(text='唔知你想點，麻煩你再試過。\n' +
                                                      '或者用 /help 睇其他選項。')
@@ -421,7 +423,9 @@ class HKGathering(telepot.helper.ChatHandler):
                     poll_id = msg['text'].split('_')[1].split('@')[0]
                     self.initiate_survey(poll_id,
                                          target_id=msg['from']['id'],
-                                         display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
+                                         display_name=msg['from']['first_name'])
+                    #                      display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
+
                 elif chkNConv(msg['text']) == u'查詢回應URL':
                     poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
                     self._poll = allPoll[poll_id]
