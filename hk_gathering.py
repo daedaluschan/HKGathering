@@ -239,7 +239,7 @@ class HKGathering(telepot.helper.ChatHandler):
         for choice in self._poll.choices:
             choice_str = choice_str + chkNConv(choice) + '\n'
         ans_link = u'/answer' + u'_' + chkNConv(poll_id)
-        show_keyboard = {'keyboard': [[u'開始回應'], [u'統計'], [u'結束提問']]}
+        show_keyboard = {'keyboard': [[u'查詢回應URL'], [u'統計'], [u'結束提問']]}
         self.sender.sendMessage(text= chkNConv(self._poll.gen_survey_str()) + u'\n' +
                                       self._poll.gen_start_survey_str(poll_id=poll_id),
                                 reply_markup=show_keyboard)
@@ -419,7 +419,7 @@ class HKGathering(telepot.helper.ChatHandler):
                     self.initiate_survey(poll_id,
                                          target_id=msg['from']['id'],
                                          display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
-                elif chkNConv(msg['text']) == u'開始回應':
+                elif chkNConv(msg['text']) == u'查詢回應URL':
                     poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
                     self._poll = allPoll[poll_id]
                     self.sender.sendMessage(text=self._poll.gen_start_survey_str(poll_id=poll_id))
