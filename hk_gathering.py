@@ -331,6 +331,10 @@ class HKGathering(telepot.helper.ChatHandler):
         else:
             self.get_invited(poll_id=found_poll)
 
+    def suppress_keyboard(self):
+        self.sender.sendMessage(text=u'暫時收埋 customized keyboard。可以用 /keyboard 叫返出來。',
+                                reply_markup = {'hide_keyboard': True})
+
     def on_message(self, msg):
         print('on_message() is being called')
         print('==== all poll in cache ====')
@@ -445,6 +449,8 @@ class HKGathering(telepot.helper.ChatHandler):
                     self.end_poll(poll_id=poll_id, userid=msg['from']['id'])
                 elif msg['text'].startswith('/keyboard'):
                     self.show_keyboad_to_group(_chat_id)
+                elif msg['text'].startswith('/timeout'):
+                    self.suppress_keyboard()
 
 
             print('Poll:' + self._poll.__str__())
