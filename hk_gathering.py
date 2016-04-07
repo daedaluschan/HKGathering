@@ -258,13 +258,6 @@ class HKGathering(telepot.helper.ChatHandler):
                 new_response.display_name = chkNConv(display_name)
                 new_response.preference = allPoll[poll_id].genNullResponse()
                 allPoll[poll_id].response[target_id.__str__()] = new_response
-
-            # show_keyboard = {u'keyboard': [[u'開始']]}
-            # self.bot.sendMessage(target_id,
-            #                    text=chkNConv(self._poll.gen_survey_str()) + u'\n' +
-            #                          u'請用 /begin 或者用 pop up 鍵盤開始。',
-            #                    reply_markup=show_keyboard)
-
                 self._converType = ConverType.response_poll
                 self.start_survey(poll_id=poll_id, userid=target_id)
 
@@ -360,14 +353,6 @@ class HKGathering(telepot.helper.ChatHandler):
                         self.sender.sendMessage(text='用 /new 黎 create 一個新問題，\n' +
                                                      '或者用 /result 黎查詢回應統計。\n')
 
-                    elif msg['text'].encode(encoding='utf-8') == '開始' or msg['text'].startswith('/begin'):
-                        # found_poll = self.search_poll_id(msg['from']['id'])
-                        # self._poll = allPoll[found_poll]
-                        if self.__uid != '':
-                            self._converType = ConverType.response_poll
-                            self.start_survey(self.__uid, msg['from']['id'])
-                        else:
-                            self.sender.sendMessage(text='搵唔返你個問題。請返 group 度再 link 過返來。')
                     elif re.compile('.*/start\s(\w)+').match(msg['text']) != None:
                         match_obj = re.compile('.*/start\s(\w+)').match(msg['text'])
                         found_poll = match_obj.group(1)
@@ -375,6 +360,7 @@ class HKGathering(telepot.helper.ChatHandler):
                         print('start from deep link on poll: ' + found_poll)
                         # self.initiate_survey(poll_id=found_poll, target_id=msg['from']['id'],
                         #                      display_name=msg['from']['first_name'] + ' ' + msg['from']['last_name'])
+                        self._converType = ConverType.response_poll
                         self.initiate_survey(poll_id=found_poll, target_id=msg['from']['id'],
                                              display_name=msg['from']['first_name'])
                     else:
@@ -432,7 +418,7 @@ class HKGathering(telepot.helper.ChatHandler):
                 elif chkNConv(msg['text']) == u'查詢回應URL':
                     poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
                     self._poll = allPoll[poll_id]
-                    self.sender.sendMessage(text=self._poll.gen_start_survey_str(poll_id=poll_id))
+                    self.sender.sendMessage(text=u'回應URL：' + chkNConv(start_group_url + poll_id) + u' ')
                 elif chkNConv(msg['text']) == u'統計':
                     poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
                     self._poll = allPoll[poll_id]
