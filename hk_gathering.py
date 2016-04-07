@@ -422,7 +422,7 @@ class HKGathering(telepot.helper.ChatHandler):
                                   userid = msg['from']['id'])
                     self._converType = ConverType.response_poll
 
-            elif content_type == 'text' and chat_type == 'group':
+            elif content_type == 'text' and (chat_type == 'group' or chat_type == 'supergroup'):
                 if msg['text'].startswith('/start@' + botName):
                     print('invited into group')
                     poll_id = msg['text'].split(' ')[1]
