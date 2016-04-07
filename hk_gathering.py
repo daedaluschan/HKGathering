@@ -418,7 +418,7 @@ class HKGathering(telepot.helper.ChatHandler):
                 elif chkNConv(msg['text']) == u'查詢回應URL':
                     poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
                     self._poll = allPoll[poll_id]
-                    self.sender.sendMessage(text=u'回應URL：' + chkNConv(start_group_url + poll_id) + u' ')
+                    self.sender.sendMessage(text=u'回應URL：' + chkNConv(start_private_url + poll_id) + u' ')
                 elif chkNConv(msg['text']) == u'統計':
                     poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
                     self._poll = allPoll[poll_id]
