@@ -316,6 +316,21 @@ class HKGathering(telepot.helper.ChatHandler):
         else:
             self.sender.sendMessage(text=u'唔好意思，只有開 post 者可以結束提問。')
 
+    def find_poll_by_group_id(self, groupid):
+        found_poll = 0
+        for each_poll in allPoll:
+            if allPoll[each_poll].groupId == groupid:
+                found_poll = each_poll
+
+        return  found_poll
+
+    def show_keyboad_to_group(self, groupid):
+        found_poll = self.find_poll_by_group_id(groupid=groupid)
+        if found_poll == 0:
+            self.sender.sendMessage(u'搵唔返你個 poll，可能太耐了。')
+        else:
+            self.get_invited(poll_id=found_poll)
+
     def on_message(self, msg):
         print('on_message() is being called')
         print('==== all poll in cache ====')
@@ -428,6 +443,9 @@ class HKGathering(telepot.helper.ChatHandler):
                     poll_id = self.extract_poll_id_from_chat(msg['reply_to_message']['text'])
                     self._poll = allPoll[poll_id]
                     self.end_poll(poll_id=poll_id, userid=msg['from']['id'])
+                elif msg['text'].startswith('/keyboard'):
+                    self.show_keyboad_to_group(_chat_id)
+
 
             print('Poll:' + self._poll.__str__())
         else:
