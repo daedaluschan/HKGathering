@@ -350,8 +350,9 @@ class HKGathering(telepot.helper.ChatHandler):
                         self.sender.sendMessage(text='唔該 send 你個問題俾我。')
 
                     elif msg['text'] == '/help':
-                        self.sender.sendMessage(text='用 /new 黎 create 一個新問題，\n' +
-                                                     '或者用 /result 黎查詢回應統計。\n')
+                        self.sender.sendMessage(text='用 /new 黎 create 一個新問題。\n' +
+                                                #     '或者用 /result 黎查詢回應統計。\n'
+                                                )
 
                     elif re.compile('.*/start\s(\w)+').match(msg['text']) != None:
                         match_obj = re.compile('.*/start\s(\w+)').match(msg['text'])
