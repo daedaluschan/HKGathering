@@ -1,6 +1,6 @@
 # HKGathering
 
-This is a telegram bot used to collect preference from different group chat attendee and decide for a commonly agreed proposal. It works like a poll bot, except:
+This is a telegram bot used to collect preference from different group chat attendees and come to a commonly agreed proposal. It works like a poll bot, except:
 
 * It is in Traditional Chinese (正體中文)
 * People have the flexibility to vote on multiple choice
@@ -16,7 +16,13 @@ This is a telegram bot used to collect preference from different group chat atte
 
 ## How to use: 
 
-I am now 
+I am hosting an instance of this bot and it can be found on Telegram by searching "@HKGathering". 
+
+* To create a new poll, talk to the bot in private message and use the /new option.
+* Follow the instruction and provide the content of the question and choices you might have.
+* The bot will then generate an URL which you can use to place the poll into a group chat.
+* Each individual to join the poll by via the other URL being broadcast in the group chat, which will launch a PM for the user to continue the poll.
+* Everyone can query the current poll result by only the poll creator can end the poll.
 
 
 ## Library used: 
